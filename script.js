@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.elevator-nav a');
     const sections = document.querySelectorAll('main section');
+    const animatedElements = document.querySelectorAll('.animated');
 
     // Smooth scrolling
     navLinks.forEach(link => {
@@ -13,6 +14,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 behavior: 'smooth'
             });
         });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    animatedElements.forEach(el => {
+        observer.observe(el);
     });
 
     // Active section highlighting
