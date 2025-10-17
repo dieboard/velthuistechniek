@@ -576,4 +576,23 @@ footer {
     height: auto;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-light);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-grid img:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-dark);
+}
+
+#image-lightbox .lightbox-content {
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+#caption {
+    text-align: center;
+    color: var(--white);
+    padding: 10px 20px;
+    font-size: 1.2rem;
 }

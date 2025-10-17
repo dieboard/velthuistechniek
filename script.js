@@ -134,4 +134,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Image lightbox functionality
+    const imageLightbox = document.getElementById('image-lightbox');
+    const imageLightboxImg = document.getElementById('lightbox-img');
+    const captionText = document.getElementById('caption');
+    const imageGridImages = document.querySelectorAll('.image-grid img');
+    const imageLightboxClose = imageLightbox.querySelector('.lightbox-close');
+
+    imageGridImages.forEach(image => {
+        image.addEventListener('click', () => {
+            imageLightbox.style.display = 'flex';
+            imageLightboxImg.src = image.src;
+            captionText.innerHTML = image.alt;
+        });
+    });
+
+    function closeImageLightbox() {
+        imageLightbox.style.display = 'none';
+    }
+
+    if (imageLightboxClose) {
+        imageLightboxClose.addEventListener('click', closeImageLightbox);
+    }
+
+    if (imageLightbox) {
+        imageLightbox.addEventListener('click', (e) => {
+            if (e.target === imageLightbox) {
+                closeImageLightbox();
+            }
+        });
+    }
 });
