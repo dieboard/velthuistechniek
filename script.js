@@ -97,4 +97,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // This is where we will add triggers later
     window.openLightbox = openLightbox;
+
+    // Modal functionality
+    const modalButtons = document.querySelectorAll('[data-modal-target]');
+    const closeModals = document.querySelectorAll('.modal-close');
+    const modals = document.querySelectorAll('.modal');
+
+    function openModal(modal) {
+        if (modal == null) return;
+        modal.classList.add('active');
+    }
+
+    function closeModal(modal) {
+        if (modal == null) return;
+        modal.classList.remove('active');
+    }
+
+    modalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = document.querySelector(button.dataset.modalTarget);
+            openModal(modal);
+        });
+    });
+
+    closeModals.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.modal');
+            closeModal(modal);
+        });
+    });
+
+    modals.forEach(modal => {
+        modal.addEventListener('click', e => {
+            if (e.target === modal) {
+                closeModal(modal);
+            }
+        });
+    });
 });
