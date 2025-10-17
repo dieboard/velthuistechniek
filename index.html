@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <nav class="elevator-nav">
+        <ul>
+            <li><a href="#home"><span>Home</span></a></li>
+            <li><a href="#services"><span>Diensten</span></a></li>
+            <li><a href="#about"><span>Over Ons</span></a></li>
+            <li><a href="#contact"><span>Contact</span></a></li>
+        </ul>
+    </nav>
     <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="services.html">Diensten</a></li>
-                <li><a href="about.html">Over Ons</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
         <img src="images/hero-image.png" alt="Velthuis Techniek" class="hero-image">
         <div class="header-text">
             <h1>Velthuis Techniek</h1>
@@ -23,11 +23,57 @@
         </div>
     </header>
     <main>
-        <h2>Welkom bij Velthuis Techniek</h2>
-        <p>Uw partner voor professionele beveiligingsinstallaties. Wij bieden een breed scala aan diensten om uw huis of bedrijf te beveiligen.</p>
+        <section id="home">
+            <h2>Welkom bij Velthuis Techniek</h2>
+            <p>Uw partner voor professionele beveiligingsinstallaties. Wij bieden een breed scala aan diensten om uw huis of bedrijf te beveiligen.</p>
+        </section>
+        <section id="services">
+            <h2>Onze Diensten</h2>
+            <div class="service-item">
+                <h3>Camerabeveiliging</h3>
+                <p>Wij installeren hoogwaardige camerasystemen voor zowel binnen- als buitengebruik. Bescherm uw eigendommen met kristalheldere beelden, dag en nacht.</p>
+            </div>
+            <div class="service-item">
+                <h3>Alarmsystemen</h3>
+                <p>Een betrouwbaar alarmsysteem is essentieel voor uw veiligheid. Wij bieden systemen die direct een melding sturen naar uw telefoon of een meldkamer.</p>
+            </div>
+            <div class="service-item">
+                <h3>Toegangscontrole</h3>
+                <p>Bepaal wie toegang heeft tot uw pand met onze geavanceerde toegangscontrolesystemen. Van pasjessystemen tot biometrische scanners.</p>
+            </div>
+        </section>
+        <section id="about">
+            <h2>Over Velthuis Techniek</h2>
+            <p>Velthuis Techniek is een toonaangevend bedrijf in de beveiligingsindustrie, opgericht in [Jaar]. Met een passie voor technologie en een onwrikbare toewijding aan de veiligheid van onze klanten, hebben we ons gevestigd als een betrouwbare partner voor zowel particulieren als bedrijven.</p>
+            <p>Ons team bestaat uit ervaren en gecertificeerde professionals die streven naar perfectie in elke installatie. Wij geloven in een persoonlijke aanpak en werken nauw met u samen om een oplossing op maat te bieden die perfect aansluit bij uw wensen en behoeften.</p>
+        </section>
+        <section id="contact">
+            <h2>Neem Contact Op</h2>
+            <div class="contact-info">
+                <h3>Onze Gegevens</h3>
+                <ul>
+                    <li><strong>Telefoon:</strong> 06 28 428 900</li>
+                    <li><strong>E-mail:</strong> info@velthuistechniek.nl</li>
+                    <li><strong>Adres:</strong> Voorbeeldstraat 1, 1234 AB Voorbeeldstad</li>
+                </ul>
+            </div>
+            <div class="contact-form">
+                <h3>Stuur ons een bericht</h3>
+                <form action="#" method="post">
+                    <label for="name">Naam:</label>
+                    <input type="text" id="name" name="name" required>
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="message">Bericht:</label>
+                    <textarea id="message" name="message" required></textarea>
+                    <button type="submit">Verstuur</button>
+                </form>
+            </div>
+        </section>
     </main>
     <footer>
         <p>&copy; 2024 Velthuis Techniek</p>
     </footer>
+    <script src="script.js"></script>
 </body>
 </html>

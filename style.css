@@ -5,29 +5,6 @@ body {
     color: #37474F;
 }
 
-nav {
-    background-color: #01579B;
-    padding: 1rem;
-}
-
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-}
-
-nav li {
-    margin: 0 1.5rem;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-}
 
 header {
     position: relative;
@@ -137,4 +114,68 @@ footer {
     text-align: center;
     padding: 1.5rem;
     margin-top: 2rem;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.elevator-nav {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.elevator-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.elevator-nav li {
+    margin: 10px 0;
+}
+
+.elevator-nav a {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #0277BD;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.elevator-nav a span {
+    visibility: hidden;
+    width: 120px;
+    background-color: #0277BD;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    right: 150%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.elevator-nav a:hover span {
+    visibility: visible;
+    opacity: 1;
+}
+
+.elevator-nav a.active {
+    background-color: #0277BD;
 }
