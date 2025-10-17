@@ -16,7 +16,10 @@
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    background-color: var(--background-color);
+    background:
+        radial-gradient(circle at 20% 50%, rgba(13, 71, 161, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 171, 0, 0.05) 0%, transparent 50%),
+        var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
 }
@@ -26,8 +29,11 @@ h1, h2, h3 {
 }
 
 h2 {
-    color: var(--primary-dark);
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #0d47a1, #5472d3, #ffab00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.5rem;
+    letter-spacing: -0.5px;
 }
 
 header {
@@ -36,11 +42,17 @@ header {
     color: var(--white);
 }
 
+@keyframes vanBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
 .hero-image {
     width: 100%;
     height: 100vh;
     object-fit: cover;
     filter: brightness(0.7);
+    animation: vanBounce 10s infinite ease-in-out;
 }
 
 .header-text {
@@ -125,9 +137,16 @@ section {
     background: var(--secondary-color);
 }
 
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 33, 113, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 33, 113, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 33, 113, 0); }
+}
+
 .elevator-nav a.active {
     background: var(--primary-dark);
     transform: scale(1.4);
+    animation: pulse 2s infinite;
 }
 
 .elevator-nav a span {
@@ -145,6 +164,18 @@ section {
     transform: translateY(-50%);
     opacity: 0;
     transition: opacity 0.3s ease;
+    box-shadow: var(--shadow-light);
+}
+
+.elevator-nav a span::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent var(--primary-dark);
 }
 
 .elevator-nav a:hover span {
@@ -174,22 +205,28 @@ section {
     filter: brightness(0.6);
 }
 
+.parallax-section {
+    perspective: 1000px;
+}
+
 .parallax-content {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(16px) saturate(200%);
+    -webkit-backdrop-filter: blur(16px) saturate(200%);
     padding: 2.5rem;
     border-radius: var(--border-radius);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: var(--shadow-dark);
     max-width: 800px;
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transform-style: preserve-3d;
+    border-image: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0)) 1;
 }
 
 .parallax-content:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
+    transform: translateY(-10px) scale(1.02) rotateX(10deg) rotateY(-5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .dummy-image {
@@ -199,9 +236,19 @@ section {
     border-radius: var(--border-radius);
     margin-bottom: 1.5rem;
     box-shadow: var(--shadow-light);
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+}
+
+.dummy-image:hover {
+    transform: scale(1.05);
+    border-image: var(--gradient-secondary) 1;
 }
 
 .read-more-btn {
+    position: relative;
+    overflow: hidden;
     display: inline-block;
     margin-top: 1.5rem;
     padding: 0.8rem 2rem;
@@ -212,6 +259,26 @@ section {
     border-radius: 50px;
     transition: all 0.3s ease;
     box-shadow: var(--shadow-light);
+    z-index: 1;
+}
+
+.read-more-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: -1;
+}
+
+.read-more-btn:hover::before {
+    width: 300px;
+    height: 300px;
 }
 
 .read-more-btn:hover {
@@ -224,6 +291,27 @@ section {
     margin-bottom: 2rem;
 }
 
+.contact-info a {
+    color: var(--primary-dark);
+    text-decoration: none;
+    position: relative;
+}
+
+.contact-info a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--secondary-color);
+    transition: width 0.3s;
+}
+
+.contact-info a:hover::after {
+    width: 100%;
+}
+
 .contact-form form {
     display: flex;
     flex-direction: column;
@@ -234,42 +322,60 @@ section {
     position: relative;
 }
 
+.form-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+}
+
+.form-group i {
+    margin-right: 10px;
+    color: #ccc;
+    transition: color 0.3s ease;
+}
+
 .contact-form input, .contact-form textarea {
     width: 100%;
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: var(--border-radius);
-    background: var(--white);
+    padding: 1rem 0;
+    border: none;
+    background: none;
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     transition: all 0.3s ease;
 }
 
-.contact-form label {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    color: #999;
-    pointer-events: none;
-    transition: all 0.3s ease;
-}
-
-.contact-form input:focus + label,
-.contact-form input:not(:placeholder-shown) + label,
-.contact-form textarea:focus + label,
-.contact-form textarea:not(:placeholder-shown) + label {
-    top: -0.75rem;
-    left: 0.75rem;
-    font-size: 0.85rem;
-    color: var(--primary-dark);
-    background: var(--white);
-    padding: 0 0.25rem;
-}
-
 .contact-form input:focus, .contact-form textarea:focus {
     outline: none;
-    border-color: var(--primary-dark);
-    box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.2);
+}
+
+.contact-form input:focus + .underline,
+.contact-form textarea:focus + .underline {
+    transform: scaleX(1);
+}
+
+.form-group .underline {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: var(--primary-dark);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.form-group:focus-within i {
+    color: var(--primary-dark);
+}
+
+.contact-form input:valid, .contact-form textarea:valid {
+    border-color: green;
+}
+
+.contact-form input:invalid, .contact-form textarea:invalid {
+    border-color: red;
 }
 
 .contact-form button {
@@ -307,4 +413,38 @@ footer {
 .animated.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+#particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--primary-light);
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: float 20s infinite ease-in-out;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+    }
 }

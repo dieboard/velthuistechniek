@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const particleContainer = document.getElementById('particle-container');
+    const particleCount = 20;
+
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        particleContainer.appendChild(particle);
+    }
+
     const navLinks = document.querySelectorAll('.elevator-nav a');
     const sections = document.querySelectorAll('main section');
     const animatedElements = document.querySelectorAll('.animated');

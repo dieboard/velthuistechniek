@@ -8,8 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 </head>
 <body>
+    <div id="particle-container"></div>
     <nav class="elevator-nav">
         <ul>
             <li><a href="#home"><span>Home</span></a></li>
@@ -68,7 +70,7 @@
                 <h3>Onze Gegevens</h3>
                 <ul>
                     <li><strong>Telefoon:</strong> 06 28 428 900</li>
-                    <li><strong>E-mail:</strong> info@velthuistechniek.nl</li>
+                    <li><strong>E-mail:</strong> <a href="mailto:info@velthuistechniek.nl">info@velthuistechniek.nl</a></li>
                     <li><strong>Adres:</strong> Voorbeeldstraat 1, 1234 AB Voorbeeldstad</li>
                 </ul>
             </div>
@@ -76,16 +78,16 @@
                 <h3>Stuur ons een bericht</h3>
                 <form action="#" method="post">
                     <div class="form-group">
-                        <input type="text" id="name" name="name" required placeholder=" ">
-                        <label for="name">Naam</label>
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="name" name="name" required placeholder="Naam">
                     </div>
                     <div class="form-group">
-                        <input type="email" id="email" name="email" required placeholder=" ">
-                        <label for="email">E-mail</label>
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" required placeholder="E-mail">
                     </div>
                     <div class="form-group">
-                        <textarea id="message" name="message" required placeholder=" "></textarea>
-                        <label for="message">Bericht</label>
+                        <i class="fas fa-comment-dots"></i>
+                        <textarea id="message" name="message" required placeholder="Bericht"></textarea>
                     </div>
                     <button type="submit">Verstuur</button>
                 </form>
