@@ -60,4 +60,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxVideo = document.getElementById('lightbox-video');
+    const closeBtn = document.querySelector('.lightbox-close');
+
+    function openLightbox(videoSrc) {
+        if (lightbox && lightboxVideo) {
+            lightboxVideo.src = videoSrc;
+            lightbox.classList.add('active');
+            lightboxVideo.play();
+        }
+    }
+
+    function closeLightbox() {
+        if (lightbox && lightboxVideo) {
+            lightbox.classList.remove('active');
+            lightboxVideo.pause();
+            lightboxVideo.src = ""; // Clear the source
+        }
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeLightbox);
+    }
+
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            // Close lightbox if the dark background is clicked, but not the video player itself
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    }
+
+    // This is where we will add triggers later
+    window.openLightbox = openLightbox;
 });

@@ -22,7 +22,10 @@
         </ul>
     </nav>
     <header>
-        <img src="images/hero-image.png" alt="Velthuis Techniek" class="hero-image">
+        <video autoplay muted loop playsinline id="hero-video">
+            <source src="videos/dummy101.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
         <div class="header-text">
             <h1>Velthuis Techniek</h1>
             <p>Voor al uw elektrotechnische installaties!</p>
@@ -38,7 +41,7 @@
             <div class="parallax-bg" style="background-image: url('images/placeholder1.jpg');"></div>
             <div class="parallax-content animated">
                 <h2>Waarom Beveiliging Belangrijk Is</h2>
-                <img src="images/dummy1.png" alt="Dummy Image" class="dummy-image">
+                <img src="images/dummy1.jpg" alt="Dummy Image" class="dummy-image">
                 <p>In een wereld waar veiligheid een prioriteit is, biedt een goed beveiligingssysteem gemoedsrust. Het beschermt niet alleen uw eigendommen, maar ook de mensen die u dierbaar zijn. Of het nu gaat om het afschrikken van inbrekers of het monitoren van uw pand op afstand, de juiste beveiliging maakt het verschil.</p>
                 <a href="why-security.html" class="read-more-btn">Lees Meer</a>
             </div>
@@ -48,9 +51,12 @@
             <div class="parallax-bg" style="background-image: url('images/placeholder2.jpg');"></div>
             <div class="parallax-content animated">
                 <h2>Hoe Wij Installeren</h2>
-                <img src="images/dummy2.png" alt="Dummy Image" class="dummy-image">
+                <img src="images/dummy2.jpg" alt="Dummy Image" class="dummy-image">
                 <p>Onze installatieprocedure is zorgvuldig en efficiënt. We beginnen met een grondige analyse van uw locatie om de meest strategische plekken voor camera's en sensoren te bepalen. Vervolgens installeren onze gecertificeerde technici de apparatuur met minimale overlast en zorgen ze voor een naadloze integratie met uw bestaande systemen.</p>
-                <a href="how-we-install.html" class="read-more-btn">Lees Meer</a>
+                <div class="card-buttons">
+                    <a href="how-we-install.html" class="read-more-btn">Lees Meer</a>
+                    <button class="read-more-btn video-btn" onclick="openLightbox('videos/dummy102.mp4')"><i class="fas fa-play"></i> Bekijk Demo</button>
+                </div>
             </div>
         </section>
 
@@ -58,9 +64,12 @@
             <div class="parallax-bg" style="background-image: url('images/placeholder3.jpg');"></div>
             <div class="parallax-content animated">
                 <h2>Onze Software</h2>
-                <img src="images/dummy3.png" alt="Dummy Image" class="dummy-image">
+                <img src="images/dummy3.jpg" alt="Dummy Image" class="dummy-image">
                 <p>Wij maken gebruik van geavanceerde software die u volledige controle geeft over uw beveiligingssysteem. Via een gebruiksvriendelijke app op uw smartphone of computer kunt u live beelden bekijken, opnames terugkijken en direct meldingen ontvangen. De software is ontworpen voor betrouwbaarheid en gebruiksgemak.</p>
-                <a href="our-software.html" class="read-more-btn">Lees Meer</a>
+                <div class="card-buttons">
+                    <a href="our-software.html" class="read-more-btn">Lees Meer</a>
+                    <button class="read-more-btn video-btn" onclick="openLightbox('videos/dummy102.mp4')"><i class="fas fa-play"></i> Bekijk Demo</button>
+                </div>
             </div>
         </section>
 
@@ -97,6 +106,17 @@
     <footer>
         <p>&copy; 2024 Velthuis Techniek</p>
     </footer>
+
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-content">
+            <video id="lightbox-video" controls>
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
