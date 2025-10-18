@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    <!-- The API key is now a placeholder that the server will replace -->
-    <script src="https://cdn.tiny.cloud/1/YOUR_TINYMCE_API_KEY_PLACEHOLDER/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+    <script src="https://cdn.tiny.cloud/1/3n17gnuookphbwng19976ys835re9sbihbx9luba62brkc98/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
         h1, h2 { color: #333; }
@@ -62,28 +61,21 @@
         const projectsList = document.getElementById('projects-list');
         const createProjectForm = document.getElementById('create-project-form');
 
-        // This function returns the new, enhanced TinyMCE configuration
-        function getTinyMceConfig(selector) {
-            return {
-                selector: selector,
-                plugins: [
-                  'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-                  'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'advtemplate', 'ai', 'uploadcare', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown','importword', 'exportword', 'exportpdf'
-                ],
-                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                tinycomments_mode: 'embedded',
-                tinycomments_author: 'Author name',
-                mergetags_list: [
-                  { value: 'First.Name', title: 'First Name' },
-                  { value: 'Email', title: 'Email' },
-                ],
-                ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
-                uploadcare_public_key: '1968d2dca0e403257add',
-            };
-        }
-
-        // Initialize TinyMCE for the "new project" text area
-        tinymce.init(getTinyMceConfig('#new-project-description'));
+        // Initialize TinyMCE for new project description
+        tinymce.init({
+            selector: '#new-project-description',
+            height: 300,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar: 'undo redo | formatselect | ' +
+            'bold italic backcolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help'
+        });
 
         // Fetch and display projects
         async function loadProjects() {
@@ -114,21 +106,30 @@
                 `;
                 projectsList.appendChild(projectEl);
 
-                // Add event listener for the "Edit" button
+                // Add TinyMCE to existing project descriptions when editing
                 projectEl.querySelector('.edit-btn').addEventListener('click', () => {
                     const descriptionDiv = document.getElementById(`description-${index}`);
-                    const editor = tinymce.get(`description-${index}`);
-
-                    if (!editor) {
-                        // If editor doesn't exist, initialize it
-                        tinymce.init(getTinyMceConfig(`#description-${index}`));
+                    if (!descriptionDiv.querySelector('.tox-tinymce')) {
+                        tinymce.init({
+                            selector: `#description-${index}`,
+                            height: 300,
+                            menubar: false,
+                            plugins: [
+                                'advlist autolink lists link image charmap print preview anchor',
+                                'searchreplace visualblocks code fullscreen',
+                                'insertdatetime media table paste code help wordcount'
+                            ],
+                            toolbar: 'undo redo | formatselect | ' +
+                            'bold italic backcolor | alignleft aligncenter ' +
+                            'alignright alignjustify | bullist numlist outdent indent | ' +
+                            'removeformat | help'
+                        });
                         projectEl.querySelector('.edit-btn').textContent = "Save";
                     } else {
-                        // If editor exists, save content and remove it
-                        const newDescription = editor.getContent();
+                        const newDescription = tinymce.get(`description-${index}`).getContent();
                         updateProject(index, project.title, newDescription);
-                        editor.remove();
-                        descriptionDiv.innerHTML = newDescription;
+                        tinymce.get(`description-${index}`).remove();
+                        descriptionDiv.innerHTML = newDescription; // Show saved content
                         projectEl.querySelector('.edit-btn').textContent = "Edit";
                     }
                 });
@@ -150,14 +151,14 @@
             loadProjects();
         });
 
-        // Update a project's text content
+        // Update a project
         async function updateProject(index, title, description) {
             await fetch(`/api/projects/${index}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title, description })
             });
-            // No need to call loadProjects() here, as it would re-render everything
+            loadProjects();
         }
 
         // Handle project deletion and image uploads
