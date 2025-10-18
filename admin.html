@@ -36,6 +36,7 @@
 <body>
 
     <div id="app">
+        <button id="logout-btn" style="position: absolute; top: 20px; right: 20px;">Logout</button>
         <h1>Project Management</h1>
 
         <!-- Create New Project -->
@@ -188,6 +189,13 @@
                     body: formData
                 });
                 loadProjects();
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            const response = await fetch('/logout', { method: 'POST' });
+            if (response.ok) {
+                window.location.href = '/login';
             }
         });
 

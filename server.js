@@ -1,21 +1,66 @@
-require('dotenv').config(); // This line loads the .env file
+require('dotenv').config();
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const multer = require('multer');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const { passwordHash } = require('./auth');
 
 const app = express();
 const port = 3000;
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your-default-secret-key';
+
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(cookieParser());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/content.json', express.static(path.join(__dirname, 'content.json')));
 
 const contentPath = path.join(__dirname, 'content.json');
+
+// --- Authentication Middleware ---
+const authenticateToken = (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.redirect('/login');
+    }
+
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.redirect('/login');
+        }
+        req.user = user;
+        next();
+    });
+};
+
+// --- Login and Logout Routes ---
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'));
+});
+
+app.post('/login', (req, res) => {
+    const { password } = req.body;
+    if (bcrypt.compareSync(password, passwordHash)) {
+        const token = jwt.sign({ user: 'admin' }, JWT_SECRET, { expiresIn: '1h' });
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+        res.status(200).send('Login successful');
+    } else {
+        res.status(401).send('Invalid password');
+    }
+});
+
+app.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.status(200).send('Logged out');
+});
+
 
 // Multer storage configuration
 const storage = multer.diskStorage({
@@ -40,16 +85,16 @@ const writeContent = (content) => {
     fs.writeFileSync(contentPath, JSON.stringify(content, null, 2), 'utf8');
 };
 
-// --- API Endpoints ---
+// --- API Endpoints (Protected) ---
 
 // Get all projects
-app.get('/api/projects', (req, res) => {
+app.get('/api/projects', authenticateToken, (req, res) => {
     const content = readContent();
     res.json(content.projects);
 });
 
 // Create a new project
-app.post('/api/projects', (req, res) => {
+app.post('/api/projects', authenticateToken, (req, res) => {
     const content = readContent();
     const newProject = {
         title: req.body.title,
@@ -62,7 +107,7 @@ app.post('/api/projects', (req, res) => {
 });
 
 // Update a project
-app.put('/api/projects/:index', (req, res) => {
+app.put('/api/projects/:index', authenticateToken, (req, res) => {
     const content = readContent();
     const index = parseInt(req.params.index, 10);
     if (index >= 0 && index < content.projects.length) {
@@ -76,7 +121,7 @@ app.put('/api/projects/:index', (req, res) => {
 });
 
 // Delete a project
-app.delete('/api/projects/:index', (req, res) => {
+app.delete('/api/projects/:index', authenticateToken, (req, res) => {
     const content = readContent();
     const index = parseInt(req.params.index, 10);
     if (index >= 0 && index < content.projects.length) {
@@ -89,7 +134,7 @@ app.delete('/api/projects/:index', (req, res) => {
 });
 
 // Upload images to a project
-app.post('/api/projects/:index/images', upload.array('images'), (req, res) => {
+app.post('/api/projects/:index/images', authenticateToken, upload.array('images'), (req, res) => {
     const content = readContent();
     const index = parseInt(req.params.index, 10);
     if (index >= 0 && index < content.projects.length) {
@@ -103,7 +148,7 @@ app.post('/api/projects/:index/images', upload.array('images'), (req, res) => {
 });
 
 // Delete an image from a project
-app.delete('/api/projects/:projectIndex/images/:imageIndex', (req, res) => {
+app.delete('/api/projects/:projectIndex/images/:imageIndex', authenticateToken, (req, res) => {
     const content = readContent();
     const projectIndex = parseInt(req.params.projectIndex, 10);
     const imageIndex = parseInt(req.params.imageIndex, 10);
@@ -122,18 +167,18 @@ app.delete('/api/projects/:projectIndex/images/:imageIndex', (req, res) => {
     }
 });
 
-// Serve the admin panel and inject the API key
-app.get('/admin', (req, res) => {
+// Serve the admin panel (protected)
+app.get('/admin', authenticateToken, (req, res) => {
     fs.readFile(path.join(__dirname, 'admin.html'), 'utf8', (err, data) => {
         if (err) {
             return res.status(500).send('Error reading admin file');
         }
-        // Replace a placeholder with the actual API key
         const result = data.replace('YOUR_TINYMCE_API_KEY_PLACEHOLDER', process.env.TINYMCE_API_KEY);
         res.send(result);
     });
 });
 
 app.listen(port, () => {
-    console.log(`Admin server running at http://localhost:${port}/admin`);
+    console.log(`Admin server running at http://localhost:${port}`);
+    console.log(`Login at http://localhost:${port}/login`);
 });
