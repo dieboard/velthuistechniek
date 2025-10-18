@@ -590,6 +590,8 @@ footer {
 }
 
 #image-lightbox .lightbox-content {
+    width: auto;
+    height: auto;
     max-width: 90vw;
     max-height: 90vh;
 }
