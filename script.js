@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lightbox functionality
     const lightbox = document.getElementById('lightbox');
     const lightboxVideo = document.getElementById('lightbox-video');
-    const closeBtn = document.querySelector('.lightbox-close');
+    const closeBtn = document.querySelector('#lightbox .lightbox-close');
 
     function openLightbox(videoSrc) {
         if (lightbox && lightboxVideo) {
@@ -140,27 +140,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageLightboxImg = document.getElementById('lightbox-img');
     const captionText = document.getElementById('caption');
     const imageGridImages = document.querySelectorAll('.image-grid img');
-    const imageLightboxClose = imageLightbox.querySelector('.lightbox-close');
+    const imageLightboxClose = document.querySelector('#image-lightbox .lightbox-close');
 
     imageGridImages.forEach(image => {
         image.addEventListener('click', () => {
-            imageLightbox.style.display = 'flex';
+            imageLightbox.classList.add('active');
             imageLightboxImg.src = image.src;
             captionText.innerHTML = image.alt;
         });
     });
 
     function closeImageLightbox() {
-        imageLightbox.style.display = 'none';
-    }
-
-    if (imageLightboxClose) {
-        imageLightboxClose.addEventListener('click', closeImageLightbox);
+        imageLightbox.classList.remove('active');
     }
 
     if (imageLightbox) {
         imageLightbox.addEventListener('click', (e) => {
-            if (e.target === imageLightbox) {
+            if (e.target === imageLightbox || e.target.classList.contains('lightbox-close')) {
                 closeImageLightbox();
             }
         });

@@ -585,6 +585,10 @@ footer {
     box-shadow: var(--shadow-dark);
 }
 
+#image-lightbox {
+    z-index: 2001;
+}
+
 #image-lightbox .lightbox-content {
     max-width: 90vw;
     max-height: 90vh;
