@@ -1,0 +1,16 @@
+{
+  "projects": [
+    {
+      "title": "Bestaand Werk",
+      "description": "Een verzameling van onze eerdere installaties en projecten.",
+      "images": [
+        "images/placeholder1.png",
+        "images/placeholder2.png",
+        "images/placeholder3.png",
+        "images/dummy1.png",
+        "images/dummy2.png",
+        "images/dummy3.png"
+      ]
+    }
+  ]
+}

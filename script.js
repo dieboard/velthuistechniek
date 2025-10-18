@@ -165,4 +165,56 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Project Gallery Modal
+    const projectDetailModal = document.getElementById('project-detail-modal');
+
+    function openProjectModal(project) {
+        if (!projectDetailModal) return;
+
+        const titleEl = document.getElementById('project-modal-title');
+        const descriptionEl = document.getElementById('project-modal-description');
+        const carouselImagesEl = projectDetailModal.querySelector('.carousel-images');
+
+        titleEl.textContent = project.title;
+        descriptionEl.innerHTML = project.description;
+        carouselImagesEl.innerHTML = project.images.map((img, index) =>
+            `<img src="${img}" alt="${project.title}" style="display: ${index === 0 ? 'block' : 'none'};">`
+        ).join('');
+
+        projectDetailModal.classList.add('active');
+        let currentImageIndex = 0;
+
+        const images = carouselImagesEl.querySelectorAll('img');
+        const prevBtn = projectDetailModal.querySelector('.carousel-prev');
+        const nextBtn = projectDetailModal.querySelector('.carousel-next');
+
+        function showImage(index) {
+            images.forEach((img, i) => {
+                img.style.display = i === index ? 'block' : 'none';
+            });
+        }
+
+        prevBtn.onclick = () => {
+            currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : images.length - 1;
+            showImage(currentImageIndex);
+        };
+
+        nextBtn.onclick = () => {
+            currentImageIndex = (currentImageIndex < images.length - 1) ? currentImageIndex + 1 : 0;
+            showImage(currentImageIndex);
+        };
+    }
+
+    const projectGrid = document.querySelector('.project-grid');
+    if (projectGrid) {
+        projectGrid.addEventListener('click', (e) => {
+            const projectCard = e.target.closest('.project-card');
+            if (projectCard) {
+                const projectIndex = projectCard.dataset.projectIndex;
+                const project = window.projects[projectIndex];
+                openProjectModal(project);
+            }
+        });
+    }
 });
