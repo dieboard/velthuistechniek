@@ -154,9 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
         imageLightbox.classList.remove('active');
     }
 
+    if (imageLightboxClose) {
+        imageLightboxClose.addEventListener('click', closeImageLightbox);
+    }
+
     if (imageLightbox) {
         imageLightbox.addEventListener('click', (e) => {
-            if (e.target === imageLightbox || e.target.classList.contains('lightbox-close')) {
+            if (e.target === imageLightbox) {
                 closeImageLightbox();
             }
         });
