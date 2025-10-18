@@ -7,12 +7,17 @@ const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const { passwordHash } = require('./auth');
 
 const app = express();
 const port = 3000;
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-default-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET;
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH;
+
+if (!JWT_SECRET || !ADMIN_PASSWORD_HASH) {
+    console.error("FATAL ERROR: JWT_SECRET and ADMIN_PASSWORD_HASH must be set in the environment.");
+    process.exit(1);
+}
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -47,7 +52,7 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
     const { password } = req.body;
-    if (bcrypt.compareSync(password, passwordHash)) {
+    if (bcrypt.compareSync(password, ADMIN_PASSWORD_HASH)) {
         const token = jwt.sign({ user: 'admin' }, JWT_SECRET, { expiresIn: '1h' });
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
         res.status(200).send('Login successful');
