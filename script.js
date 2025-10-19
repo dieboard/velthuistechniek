@@ -177,8 +177,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const carouselImagesEl = projectDetailModal.querySelector('.carousel-images');
 
         titleEl.textContent = project.title;
-        descriptionEl.innerHTML = project.description;
-        carouselImagesEl.innerHTML = project.images.map((img, index) =>
+        descriptionEl.innerHTML = project.modalDescription || project.description || ''; // Fallback for old data
+        carouselImagesEl.innerHTML = (project.modalImages || project.images || []).map((img, index) =>
             `<img src="${img}" alt="${project.title}" style="display: ${index === 0 ? 'block' : 'none'};">`
         ).join('');
 

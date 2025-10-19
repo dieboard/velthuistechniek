@@ -44,7 +44,9 @@
             <h2>Create New Project</h2>
             <form id="create-project-form">
                 <input type="text" id="new-project-title" placeholder="Project Title" required>
-                <textarea id="new-project-description"></textarea>
+                <textarea id="new-tile-summary" placeholder="Tile Summary"></textarea>
+                <label for="new-modal-description">Modal Description</label>
+                <textarea id="new-modal-description"></textarea>
                 <button type="submit">Create Project</button>
             </form>
         </div>
@@ -83,8 +85,8 @@
             };
         }
 
-        // Initialize TinyMCE for the "new project" text area
-        tinymce.init(getTinyMceConfig('#new-project-description'));
+        // Initialize TinyMCE for the new project text areas
+        tinymce.init(getTinyMceConfig('#new-modal-description'));
 
         // Fetch and display projects
         async function loadProjects() {
@@ -96,10 +98,24 @@
                 const projectEl = document.createElement('div');
                 projectEl.className = 'project';
                 projectEl.innerHTML = `
-                    <h3>${project.title}</h3>
-                    <div id="description-${index}">${project.description}</div>
+                    <h3><input type="text" value="${project.title}" data-project-index="${index}" class="project-title-input"></h3>
+
+                    <p><strong>Tile Summary:</strong></p>
+                    <textarea data-project-index="${index}" class="tile-summary-input">${project.tileSummary || ''}</textarea>
+
+                    <p><strong>Tile Image:</strong></p>
+                    <img src="${project.tileImage || 'images/placeholder-project.png'}" class="tile-image-preview" width="100">
+                    <form class="tile-image-form" data-project-index="${index}">
+                        <input type="file" name="tileImage">
+                        <button type="submit">Upload Tile Image</button>
+                    </form>
+
+                    <p><strong>Modal Description:</strong></p>
+                    <div id="description-${index}" class="modal-description-div">${project.modalDescription || ''}</div>
+
+                    <p><strong>Modal Images:</strong></p>
                     <div class="project-images" id="images-${index}">
-                        ${project.images.map((img, imgIndex) => `
+                        ${(project.modalImages || []).map((img, imgIndex) => `
                             <div class="project-image">
                                 <img src="${img}" alt="Project Image">
                                 <button class="delete-img-btn" data-project-index="${index}" data-image-index="${imgIndex}">&times;</button>
@@ -107,10 +123,12 @@
                         `).join('')}
                     </div>
                     <form class="upload-form" data-project-index="${index}">
-                        <input type="file" name="images" multiple>
-                        <button type="submit">Upload Images</button>
+                        <input type="file" name="modalImages" multiple>
+                        <button type="submit">Upload Modal Images</button>
                     </form>
-                    <button class="edit-btn" data-project-index="${index}">Edit</button>
+
+                    <button class="save-btn" data-project-index="${index}">Save All Text</button>
+                    <button class="edit-btn" data-project-index="${index}">Edit Description</button>
                     <button class="delete-btn" data-project-index="${index}">Delete Project</button>
                 `;
                 projectsList.appendChild(projectEl);
@@ -121,16 +139,11 @@
                     const editor = tinymce.get(`description-${index}`);
 
                     if (!editor) {
-                        // If editor doesn't exist, initialize it
                         tinymce.init(getTinyMceConfig(`#description-${index}`));
-                        projectEl.querySelector('.edit-btn').textContent = "Save";
+                        projectEl.querySelector('.edit-btn').textContent = "Finish Editing";
                     } else {
-                        // If editor exists, save content and remove it
-                        const newDescription = editor.getContent();
-                        updateProject(index, project.title, newDescription);
                         editor.remove();
-                        descriptionDiv.innerHTML = newDescription;
-                        projectEl.querySelector('.edit-btn').textContent = "Edit";
+                        projectEl.querySelector('.edit-btn').textContent = "Edit Description";
                     }
                 });
             });
@@ -140,28 +153,30 @@
         createProjectForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const title = document.getElementById('new-project-title').value;
-            const description = tinymce.get('new-project-description').getContent();
+            const tileSummary = document.getElementById('new-tile-summary').value;
+            const modalDescription = tinymce.get('new-modal-description').getContent();
+
             await fetch('/api/projects', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, description })
+                body: JSON.stringify({ title, tileSummary, modalDescription })
             });
             createProjectForm.reset();
-            tinymce.get('new-project-description').setContent('');
+            tinymce.get('new-modal-description').setContent('');
             loadProjects();
         });
 
         // Update a project's text content
-        async function updateProject(index, title, description) {
+        async function updateProject(index, title, tileSummary, modalDescription) {
             await fetch(`/api/projects/${index}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, description })
+                body: JSON.stringify({ title, tileSummary, modalDescription })
             });
-            // No need to call loadProjects() here, as it would re-render everything
+            loadProjects();
         }
 
-        // Handle project deletion and image uploads
+        // Handle project deletion, saving, and image uploads
         projectsList.addEventListener('click', async (e) => {
             if (e.target.classList.contains('delete-btn')) {
                 const index = e.target.dataset.projectIndex;
@@ -169,27 +184,48 @@
                     await fetch(`/api/projects/${index}`, { method: 'DELETE' });
                     loadProjects();
                 }
+            } else if (e.target.classList.contains('save-btn')) {
+                const index = e.target.dataset.projectIndex;
+                const projectEl = e.target.closest('.project');
+                const title = projectEl.querySelector('.project-title-input').value;
+                const tileSummary = projectEl.querySelector('.tile-summary-input').value;
+
+                let modalDescription;
+                const editor = tinymce.get(`description-${index}`);
+                if (editor) {
+                    modalDescription = editor.getContent();
+                } else {
+                    modalDescription = projectEl.querySelector('.modal-description-div').innerHTML;
+                }
+
+                updateProject(index, title, tileSummary, modalDescription);
             } else if (e.target.classList.contains('delete-img-btn')) {
                 const projectIndex = e.target.dataset.projectIndex;
                 const imageIndex = e.target.dataset.imageIndex;
                  if (confirm('Are you sure you want to delete this image?')) {
-                    await fetch(`/api/projects/${projectIndex}/images/${imageIndex}`, { method: 'DELETE' });
+                    await fetch(`/api/projects/${projectIndex}/modal-images/${imageIndex}`, { method: 'DELETE' });
                     loadProjects();
                 }
             }
         });
 
         projectsList.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const index = e.target.dataset.projectIndex;
+            const formData = new FormData(e.target);
+
             if (e.target.classList.contains('upload-form')) {
-                e.preventDefault();
-                const index = e.target.dataset.projectIndex;
-                const formData = new FormData(e.target);
-                await fetch(`/api/projects/${index}/images`, {
+                await fetch(`/api/projects/${index}/modal-images`, {
                     method: 'POST',
                     body: formData
                 });
-                loadProjects();
+            } else if (e.target.classList.contains('tile-image-form')) {
+                await fetch(`/api/projects/${index}/tile-image`, {
+                    method: 'POST',
+                    body: formData
+                });
             }
+            loadProjects();
         });
 
         document.getElementById('logout-btn').addEventListener('click', async () => {

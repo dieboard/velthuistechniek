@@ -102,24 +102,28 @@ app.get('/api/projects', authenticateToken, (req, res) => {
 app.post('/api/projects', authenticateToken, (req, res) => {
     const content = readContent();
     const newProject = {
-        title: req.body.title,
-        description: req.body.description,
-        images: []
+        title: req.body.title || "Nieuw Project",
+        tileSummary: req.body.tileSummary || "",
+        tileImage: "", // Will be uploaded separately
+        modalDescription: req.body.modalDescription || "",
+        modalImages: []
     };
     content.projects.unshift(newProject); // Add to the beginning of the array
     writeContent(content);
     res.status(201).json(newProject);
 });
 
-// Update a project
+// Update a project's text content
 app.put('/api/projects/:index', authenticateToken, (req, res) => {
     const content = readContent();
     const index = parseInt(req.params.index, 10);
     if (index >= 0 && index < content.projects.length) {
-        content.projects[index].title = req.body.title;
-        content.projects[index].description = req.body.description;
+        const project = content.projects[index];
+        project.title = req.body.title ?? project.title;
+        project.tileSummary = req.body.tileSummary ?? project.tileSummary;
+        project.modalDescription = req.body.modalDescription ?? project.modalDescription;
         writeContent(content);
-        res.json(content.projects[index]);
+        res.json(project);
     } else {
         res.status(404).send('Project not found');
     }
@@ -138,30 +142,51 @@ app.delete('/api/projects/:index', authenticateToken, (req, res) => {
     }
 });
 
-// Upload images to a project
-app.post('/api/projects/:index/images', authenticateToken, upload.array('images'), (req, res) => {
+// Upload a tile image to a project
+app.post('/api/projects/:index/tile-image', authenticateToken, upload.single('tileImage'), (req, res) => {
     const content = readContent();
     const index = parseInt(req.params.index, 10);
     if (index >= 0 && index < content.projects.length) {
-        const filepaths = req.files.map(file => `images/${file.filename}`);
-        content.projects[index].images.push(...filepaths);
-        writeContent(content);
-        res.json(content.projects[index]);
+        if (req.file) {
+            content.projects[index].tileImage = `images/${req.file.filename}`;
+            writeContent(content);
+            res.json(content.projects[index]);
+        } else {
+            res.status(400).send('No tile image file uploaded.');
+        }
     } else {
         res.status(404).send('Project not found');
     }
 });
 
-// Delete an image from a project
-app.delete('/api/projects/:projectIndex/images/:imageIndex', authenticateToken, (req, res) => {
+// Upload modal images to a project
+app.post('/api/projects/:index/modal-images', authenticateToken, upload.array('modalImages'), (req, res) => {
+    const content = readContent();
+    const index = parseInt(req.params.index, 10);
+    if (index >= 0 && index < content.projects.length) {
+        const project = content.projects[index];
+        if (!Array.isArray(project.modalImages)) {
+            project.modalImages = [];
+        }
+        const filepaths = req.files.map(file => `images/${file.filename}`);
+        project.modalImages.push(...filepaths);
+        writeContent(content);
+        res.json(project);
+    } else {
+        res.status(404).send('Project not found');
+    }
+});
+
+// Delete a modal image from a project
+app.delete('/api/projects/:projectIndex/modal-images/:imageIndex', authenticateToken, (req, res) => {
     const content = readContent();
     const projectIndex = parseInt(req.params.projectIndex, 10);
     const imageIndex = parseInt(req.params.imageIndex, 10);
 
     if (projectIndex >= 0 && projectIndex < content.projects.length) {
         const project = content.projects[projectIndex];
-        if (imageIndex >= 0 && imageIndex < project.images.length) {
-            project.images.splice(imageIndex, 1);
+        if (project.modalImages && imageIndex >= 0 && imageIndex < project.modalImages.length) {
+            project.modalImages.splice(imageIndex, 1);
             writeContent(content);
             res.json(project);
         } else {

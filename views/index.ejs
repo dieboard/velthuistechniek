@@ -52,8 +52,11 @@
             <div class="project-grid">
                 <% projects.forEach(function(project, index) { %>
                     <div class="project-card" data-project-index="<%= index %>">
-                        <img src="<%= project.images[0] || 'images/placeholder-project.png' %>" alt="<%= project.title %>">
-                        <div class="project-card-title"><%= project.title %></div>
+                        <img src="<%= project.tileImage || 'images/placeholder-project.png' %>" alt="<%= project.title %>">
+                        <div class="project-card-content">
+                            <h3><%= project.title %></h3>
+                            <p><%= project.tileSummary %></p>
+                        </div>
                     </div>
                 <% }); %>
             </div>
