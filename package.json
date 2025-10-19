@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "http-server": "^14.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
+    "playwright": "^1.56.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "nodemon": "^3.1.10"
+  },
+  "scripts": {
+    "start": "nodemon server.js",
+    "build": "node build.js"
+  }
+}

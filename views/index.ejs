@@ -47,16 +47,18 @@
             </div>
         </section>
 
-        <section id="how-it-works" class="parallax-section">
-            <div class="parallax-bg" style="background-image: url('images/placeholder2.png');"></div>
-            <div class="parallax-content animated">
-                <h2>Hoe Wij Installeren</h2>
-                <img src="images/dummy2.png" alt="Dummy Image" class="dummy-image">
-                <p>Onze installatieprocedure is zorgvuldig en efficiënt. We beginnen met een grondige analyse van uw locatie om de meest strategische plekken voor camera's en sensoren te bepalen. Vervolgens installeren onze gecertificeerde technici de apparatuur met minimale overlast en zorgen ze voor een naadloze integratie met uw bestaande systemen.</p>
-                <div class="card-buttons">
-                    <button class="read-more-btn" data-modal-target="#how-we-install-modal">Lees Meer</button>
-                    <button class="read-more-btn" data-modal-target="#image-grid-modal">Bekijk Galerij</button>
-                </div>
+        <section id="projects">
+            <h2>Onze Projecten</h2>
+            <div class="project-grid">
+                <% projects.forEach(function(project, index) { %>
+                    <div class="project-card" data-project-index="<%= index %>">
+                        <img src="<%= project.tileImage || 'images/placeholder-project.png' %>" alt="<%= project.title %>">
+                        <div class="project-card-content">
+                            <h3><%= project.title %></h3>
+                            <p><%= project.tileSummary %></p>
+                        </div>
+                    </div>
+                <% }); %>
             </div>
         </section>
 
@@ -104,7 +106,7 @@
         </section>
     </main>
     <footer>
-        <p>&copy; 2025 Velthuis Techniek</p>
+        <p>&copy; 2024 Velthuis Techniek</p>
     </footer>
 
     <div id="lightbox" class="lightbox">
@@ -153,21 +155,22 @@
         </div>
     </div>
 
-    <div id="image-grid-modal" class="modal">
+    <div id="project-detail-modal" class="modal">
         <div class="modal-content">
             <span class="modal-close">&times;</span>
-            <h2>Fotogalerij</h2>
-            <div class="image-grid">
-                <img src="images/placeholder1.png" alt="Placeholder Image 1">
-                <img src="images/placeholder2.png" alt="Placeholder Image 2">
-                <img src="images/placeholder3.png" alt="Placeholder Image 3">
-                <img src="images/dummy1.png" alt="Placeholder Image 4">
-                <img src="images/dummy2.png" alt="Placeholder Image 5">
-                <img src="images/dummy3.png" alt="Placeholder Image 6">
+            <h2 id="project-modal-title"></h2>
+            <div class="project-modal-body">
+                <div id="project-modal-description"></div>
+                <div class="project-modal-images">
+                    <!-- Images will be injected here -->
+                </div>
             </div>
         </div>
     </div>
 
+    <script>
+        window.projects = <%- JSON.stringify(projects) %>;
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
