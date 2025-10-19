@@ -8,3 +8,10 @@ package-lock.json
 *.gif
 *.mp4
 *.mov
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

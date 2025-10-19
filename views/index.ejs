@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 </head>
+
 <body>
     <div id="particle-container"></div>
     <nav class="elevator-nav">
@@ -34,7 +36,8 @@
     <main>
         <section id="home">
             <h2>Welkom bij Velthuis Techniek</h2>
-            <p>Uw partner voor professionele beveiligingsinstallaties. Wij bieden een breed scala aan diensten om uw huis of bedrijf te beveiligen.</p>
+            <p>Uw partner voor professionele beveiligingsinstallaties. Wij bieden een breed scala aan diensten om uw
+                huis of bedrijf te beveiligen.</p>
         </section>
 
         <section id="why-security" class="parallax-section">
@@ -42,8 +45,25 @@
             <div class="parallax-content animated">
                 <h2>Waarom Beveiliging Belangrijk Is</h2>
                 <img src="images/dummy1.png" alt="Dummy Image" class="dummy-image">
-                <p>In een wereld waar veiligheid een prioriteit is, biedt een goed beveiligingssysteem gemoedsrust. Het beschermt niet alleen uw eigendommen, maar ook de mensen die u dierbaar zijn. Of het nu gaat om het afschrikken van inbrekers of het monitoren van uw pand op afstand, de juiste beveiliging maakt het verschil.</p>
+                <p>In een wereld waar veiligheid een prioriteit is, biedt een goed beveiligingssysteem gemoedsrust. Het
+                    beschermt niet alleen uw eigendommen, maar ook de mensen die u dierbaar zijn. Of het nu gaat om het
+                    afschrikken van inbrekers of het monitoren van uw pand op afstand, de juiste beveiliging maakt het
+                    verschil.</p>
                 <button class="read-more-btn" data-modal-target="#why-security-modal">Lees Meer</button>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="parallax-section">
+            <div class="parallax-bg" style="background-image: url('images/placeholder2.png');"></div>
+            <div class="parallax-content animated">
+                <h2>Hoe Wij Installeren</h2>
+                <img src="images/dummy2.png" alt="Dummy Image" class="dummy-image">
+                <p>Van het eerste consult tot de uiteindelijke oplevering,
+                    ons proces is ontworpen voor uw gemoedsrust.</p>
+
+                <button class="read-more-btn" data-modal-target="#how-we-install-modal">
+                    Lees Meer
+                </button>
             </div>
         </section>
 
@@ -52,13 +72,18 @@
             <div class="project-grid">
                 <% projects.forEach(function(project, index) { %>
                     <div class="project-card" data-project-index="<%= index %>">
-                        <img src="<%= project.tileImage || 'images/placeholder-project.png' %>" alt="<%= project.title %>">
+                        <img src="<%= project.tileImage || 'images/placeholder-project.png' %>"
+                            alt="<%= project.title %>">
                         <div class="project-card-content">
-                            <h3><%= project.title %></h3>
-                            <p><%= project.tileSummary %></p>
+                            <h3>
+                                <%= project.title %>
+                            </h3>
+                            <p>
+                                <%= project.tileSummary %>
+                            </p>
                         </div>
                     </div>
-                <% }); %>
+                    <% }); %>
             </div>
         </section>
 
@@ -67,10 +92,14 @@
             <div class="parallax-content animated">
                 <h2>Onze Software</h2>
                 <img src="images/dummy3.png" alt="Dummy Image" class="dummy-image">
-                <p>Wij maken gebruik van geavanceerde software die u volledige controle geeft over uw beveiligingssysteem. Via een gebruiksvriendelijke app op uw smartphone of computer kunt u live beelden bekijken, opnames terugkijken en direct meldingen ontvangen. De software is ontworpen voor betrouwbaarheid en gebruiksgemak.</p>
+                <p>Wij maken gebruik van geavanceerde software die u volledige controle geeft over uw
+                    beveiligingssysteem. Via een gebruiksvriendelijke app op uw smartphone of computer kunt u live
+                    beelden bekijken, opnames terugkijken en direct meldingen ontvangen. De software is ontworpen voor
+                    betrouwbaarheid en gebruiksgemak.</p>
                 <div class="card-buttons">
                     <button class="read-more-btn" data-modal-target="#our-software-modal">Lees Meer</button>
-                    <button class="read-more-btn video-btn" onclick="openLightbox('videos/dummy102.mp4')"><i class="fas fa-play"></i> Bekijk Demo</button>
+                    <button class="read-more-btn video-btn" onclick="openLightbox('videos/Installing_a_camera_2025.mp4')"><i
+                            class="fas fa-play"></i> Bekijk Demo</button>
                 </div>
             </div>
         </section>
@@ -81,7 +110,8 @@
                 <h3>Onze Gegevens</h3>
                 <ul>
                     <li><strong>Telefoon:</strong> 06 28 428 900</li>
-                    <li><strong>E-mail:</strong> <a href="mailto:info@velthuistechniek.nl">info@velthuistechniek.nl</a></li>
+                    <li><strong>E-mail:</strong> <a href="mailto:info@velthuistechniek.nl">info@velthuistechniek.nl</a>
+                    </li>
                     <li><strong>Adres:</strong> Voorbeeldstraat 1, 1234 AB Voorbeeldstad</li>
                 </ul>
             </div>
@@ -132,7 +162,8 @@
         <div class="modal-content">
             <span class="modal-close">&times;</span>
             <h2>Waarom Beveiliging Belangrijk Is</h2>
-            <p>Hier komt de gedetailleerde informatie over waarom beveiliging belangrijk is. U kunt hier dieper ingaan op de voordelen, statistieken en verschillende soorten bedreigingen.</p>
+            <p>Hier komt de gedetailleerde informatie over waarom beveiliging belangrijk is. U kunt hier dieper ingaan
+                op de voordelen, statistieken en verschillende soorten bedreigingen.</p>
             <img src="images/placeholder1.png" alt="Placeholder Image" style="max-width: 100%; height: auto;">
         </div>
     </div>
@@ -141,7 +172,8 @@
         <div class="modal-content">
             <span class="modal-close">&times;</span>
             <h2>Hoe Wij Installeren</h2>
-            <p>Hier komt de gedetailleerde informatie over het installatieproces. U kunt hier stap voor stap uitleggen hoe de installatie in zijn werk gaat, van het eerste consult tot de uiteindelijke oplevering.</p>
+            <p>Hier komt de gedetailleerde informatie over het installatieproces. U kunt hier stap voor stap uitleggen
+                hoe de installatie in zijn werk gaat, van het eerste consult tot de uiteindelijke oplevering.</p>
             <img src="images/placeholder2.png" alt="Placeholder Image" style="max-width: 100%; height: auto;">
         </div>
     </div>
@@ -150,7 +182,8 @@
         <div class="modal-content">
             <span class="modal-close">&times;</span>
             <h2>Onze Software</h2>
-            <p>Hier komt de gedetailleerde informatie over de gebruikte software. U kunt hier de features, compatibiliteit en voordelen van de software beschrijven.</p>
+            <p>Hier komt de gedetailleerde informatie over de gebruikte software. U kunt hier de features,
+                compatibiliteit en voordelen van de software beschrijven.</p>
             <img src="images/placeholder3.png" alt="Placeholder Image" style="max-width: 100%; height: auto;">
         </div>
     </div>
@@ -169,8 +202,9 @@
     </div>
 
     <script>
-        window.projects = <%- JSON.stringify(projects) %>;
+        window.projects = <% - JSON.stringify(projects) %>;
     </script>
     <script src="script.js"></script>
 </body>
+
 </html>
