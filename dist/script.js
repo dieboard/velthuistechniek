@@ -174,36 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const titleEl = document.getElementById('project-modal-title');
         const descriptionEl = document.getElementById('project-modal-description');
-        const carouselImagesEl = projectDetailModal.querySelector('.carousel-images');
+        const imagesEl = projectDetailModal.querySelector('.project-modal-images');
 
         titleEl.textContent = project.title;
-        descriptionEl.innerHTML = project.description;
-        carouselImagesEl.innerHTML = project.images.map((img, index) =>
-            `<img src="${img}" alt="${project.title}" style="display: ${index === 0 ? 'block' : 'none'};">`
+        descriptionEl.innerHTML = project.modalDescription || project.description || ''; // Fallback for old data
+        imagesEl.innerHTML = (project.modalImages || project.images || []).map(img =>
+            `<img src="${img}" alt="${project.title}" class="modal-grid-image">`
         ).join('');
 
         projectDetailModal.classList.add('active');
-        let currentImageIndex = 0;
-
-        const images = carouselImagesEl.querySelectorAll('img');
-        const prevBtn = projectDetailModal.querySelector('.carousel-prev');
-        const nextBtn = projectDetailModal.querySelector('.carousel-next');
-
-        function showImage(index) {
-            images.forEach((img, i) => {
-                img.style.display = i === index ? 'block' : 'none';
-            });
-        }
-
-        prevBtn.onclick = () => {
-            currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : images.length - 1;
-            showImage(currentImageIndex);
-        };
-
-        nextBtn.onclick = () => {
-            currentImageIndex = (currentImageIndex < images.length - 1) ? currentImageIndex + 1 : 0;
-            showImage(currentImageIndex);
-        };
     }
 
     const projectGrid = document.querySelector('.project-grid');
@@ -217,4 +196,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    projectDetailModal.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-grid-image')) {
+            const imageLightbox = document.getElementById('image-lightbox');
+            const imageLightboxImg = document.getElementById('lightbox-img');
+            imageLightbox.classList.add('active');
+            imageLightboxImg.src = e.target.src;
+        }
+    });
 });

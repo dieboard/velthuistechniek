@@ -2,16 +2,30 @@
   "projects": [
     {
       "title": "Test Project with Image",
-      "images": []
+      "images": [],
+      "tileImage": "images/1760842748784-Gemini_Generated_Image_qich1kqich1kqich.png"
     },
     {
       "title": "Test Project with Image",
-      "images": []
+      "images": [],
+      "tileImage": "images/1760842738598-dummy3.png"
     },
     {
-      "title": "test",
+      "title": "Lange week",
       "description": "<p><img style=\"width: min(992px, 100%); aspect-ratio: 992 / 1056;\" src=\"https://ucarecdn.com/3d83bebd-11df-49b4-b712-4fec69881110/-/preview/\" sizes=\"(min-width: 992px) 992px, 100vw\" srcset=\"https://ucarecdn.com/3d83bebd-11df-49b4-b712-4fec69881110/-/resize/100x/ 100w,https://ucarecdn.com/3d83bebd-11df-49b4-b712-4fec69881110/-/resize/200x/ 200w,https://ucarecdn.com/3d83bebd-11df-49b4-b712-4fec69881110/-/resize/300x/ 300w,https://ucarecdn.com/3d83bebd-11df-49b4-b712-4fec69881110/-/resize/500x/ 500w,https://ucarecdn.com/3d83bebd-11df-49b4-b712-4fec69881110/-/resize/750x/ 750w,https://ucarecdn.com/3d83bebd-11df-49b4-b712-4fec69881110/-/preview/ 992w\"><br><br><br>Eerste tests<br>1<br><br></p>\n<p>2</p>\n<p>3</p>\n<p><img style=\"width: min(992px, 100%); aspect-ratio: 992 / 1056;\" src=\"https://ucarecdn.com/d781dae6-b4bd-4b9b-84ef-6f2dd8f26af5/-/preview/\" sizes=\"(min-width: 992px) 992px, 100vw\" srcset=\"https://ucarecdn.com/d781dae6-b4bd-4b9b-84ef-6f2dd8f26af5/-/resize/100x/ 100w,https://ucarecdn.com/d781dae6-b4bd-4b9b-84ef-6f2dd8f26af5/-/resize/200x/ 200w,https://ucarecdn.com/d781dae6-b4bd-4b9b-84ef-6f2dd8f26af5/-/resize/300x/ 300w,https://ucarecdn.com/d781dae6-b4bd-4b9b-84ef-6f2dd8f26af5/-/resize/500x/ 500w,https://ucarecdn.com/d781dae6-b4bd-4b9b-84ef-6f2dd8f26af5/-/resize/750x/ 750w,https://ucarecdn.com/d781dae6-b4bd-4b9b-84ef-6f2dd8f26af5/-/preview/ 992w\"></p>",
-      "images": []
+      "images": [],
+      "tileImage": "images/1760842651452-dummy202.png",
+      "modalImages": [
+        "images/1760842684902-Gemini_Generated_Image_Postman Pat.png",
+        "images/1760842684912-Gemini_Generated_Image_q3ibbcq3ibbcq3ib.png",
+        "images/1760842684919-Gemini_Generated_Image_qich1kqich1kqich.png",
+        "images/1760842684925-Gemini_Generated_Image_sqy13bsqy13bsqy1.png",
+        "images/1760842684931-Gemini_Generated_Image_u12j98u12j98u12j.png",
+        "images/1760842684937-Gemini_Generated_Image_x16wckx16wckx16w.png",
+        "images/1760842684943-hero-image.png"
+      ],
+      "tileSummary": "",
+      "modalDescription": "<p>ja ja</p>"
     },
     {
       "title": "Bestaand Werk",
@@ -24,6 +38,14 @@
         "images/dummy2.png",
         "images/dummy3.png",
         "images/1760817687291-Gemini_Generated_Image_qich1kqich1kqich.png"
+      ],
+      "tileImage": "images/1760842571674-dummy1.png",
+      "modalImages": [
+        "images/1760842578943-Gemini_Generated_Image_bvh0yfbvh0yfbvh0.png",
+        "images/1760842578957-Gemini_Generated_Image_fbek6ofbek6ofbek.png",
+        "images/1760842578970-Gemini_Generated_Image_gf8jrwgf8jrwgf8j.png",
+        "images/1760842578977-Gemini_Generated_Image_ld4hild4hild4hil.png",
+        "images/1760842578983-Gemini_Generated_Image_Postman Pat.png"
       ]
     }
   ]
