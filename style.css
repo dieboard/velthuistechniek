@@ -677,47 +677,13 @@ footer {
 /* Project Modal */
 .project-modal-body {
     display: flex;
+    flex-direction: column;
     gap: 20px;
     margin-top: 20px;
 }
 
-.project-modal-carousel {
-    position: relative;
-    width: 60%;
-}
-
-.carousel-images img {
-    width: 100%;
-    border-radius: 8px;
-    display: none;
-}
-
-.carousel-images img:first-child {
-    display: block;
-}
-
-.carousel-prev, .carousel-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 100;
-    font-size: 24px;
-    height: 40px;
-    width: 40px;
-    line-height: 15px;
-}
-
-.carousel-prev { left: 10px; }
-.carousel-next { right: 10px; }
-
 #project-modal-description {
-    width: 40%;
+    width: 100%;
 }
 
 .project-modal-images {
