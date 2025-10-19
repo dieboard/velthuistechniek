@@ -8,3 +8,4 @@ package-lock.json
 *.gif
 *.mp4
 *.mov
+generate_hash.js
