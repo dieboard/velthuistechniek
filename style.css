@@ -663,10 +663,30 @@ footer {
     object-fit: cover;
 }
 
-.project-card-title {
-    padding: 1rem;
-    font-weight: bold;
+.project-card-content {
+    padding: 1.5rem;
+    text-align: left;
+}
+
+.project-card-content h3 {
+    margin-top: 0;
     color: var(--primary-dark);
+}
+
+.project-card-content p {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.project-card-content .read-more-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    background: var(--primary-dark);
+}
+
+.project-card-content .read-more-btn:hover {
+    background: var(--primary-light);
+    box-shadow: var(--shadow-dark);
 }
 
 /* Project Modal */

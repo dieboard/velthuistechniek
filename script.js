@@ -206,14 +206,19 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // Refined Project Modal Trigger
     const projectGrid = document.querySelector('.project-grid');
     if (projectGrid) {
         projectGrid.addEventListener('click', (e) => {
-            const projectCard = e.target.closest('.project-card');
-            if (projectCard) {
-                const projectIndex = projectCard.dataset.projectIndex;
-                const project = window.projects[projectIndex];
-                openProjectModal(project);
+            // Check if the clicked element or its parent is the "Lees Meer" button
+            const readMoreButton = e.target.closest('.project-card .read-more-btn');
+            if (readMoreButton) {
+                const projectCard = e.target.closest('.project-card');
+                if (projectCard) {
+                    const projectIndex = projectCard.dataset.projectIndex;
+                    const project = window.projects[projectIndex];
+                    openProjectModal(project);
+                }
             }
         });
     }

@@ -47,13 +47,27 @@
             </div>
         </section>
 
+        <section id="how-it-works" class="parallax-section">
+            <div class="parallax-bg" style="background-image: url('images/placeholder2.png');"></div>
+            <div class="parallax-content animated">
+                <h2>Hoe Wij Installeren</h2>
+                <img src="images/dummy2.png" alt="Dummy Image" class="dummy-image">
+                <p>Ons installatieproces is ontworpen om efficiënt en grondig te zijn. We beginnen met een uitgebreide analyse van uw behoeften, gevolgd door een op maat gemaakt plan. Onze gecertificeerde technici zorgen voor een vlekkeloze installatie en volledige systeemin-tegratie, zodat u met vertrouwen kunt beveiligen.</p>
+                <button class="read-more-btn" data-modal-target="#how-we-install-modal">Lees Meer</button>
+            </div>
+        </section>
+
         <section id="projects">
             <h2>Onze Projecten</h2>
             <div class="project-grid">
                 <% projects.forEach(function(project, index) { %>
                     <div class="project-card" data-project-index="<%= index %>">
-                        <img src="<%= project.tileImage || project.images[0] || 'images/placeholder-project.png' %>" alt="<%= project.title %>">
-                        <div class="project-card-title"><%= project.title %></div>
+                        <img src="<%= project.tileImage || 'images/placeholder-project.png' %>" alt="<%= project.title %>">
+                        <div class="project-card-content">
+                           <h3><%= project.title %></h3>
+                           <p><%= project.tileSummary %></p>
+                           <button class="read-more-btn">Lees Meer</button>
+                        </div>
                     </div>
                 <% }); %>
             </div>
