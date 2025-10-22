@@ -9,6 +9,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+      ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
@@ -20,8 +25,3 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npx playwright test
-      env:
-        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-        ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
