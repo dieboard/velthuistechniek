@@ -1,22 +1,31 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Admin Panel Verification', () => {
-  test('should log in and display the admin panel', async ({ page }) => {
-    // Navigate to the login page
-    await page.goto('http://localhost:3000/login', { waitUntil: 'networkidle' });
+test.describe('Admin Panel', () => {
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
-    // Fill in the password and submit
-    await page.fill('#password', 'Martijn1');
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/login');
+    await page.fill('input[name="password"]', ADMIN_PASSWORD);
     await page.click('button[type="submit"]');
+    await page.waitForURL('/admin');
+  });
 
-    // Wait for the admin page to load
-    await page.waitForURL('http://localhost:3000/admin', { waitUntil: 'networkidle' });
+  test('should log in successfully', async ({ page }) => {
+    await expect(page).toHaveURL('/admin');
+  });
 
-    // Use a specific selector for the heading
-    const heading = page.locator('h1:has-text("Project Management")');
-    await expect(heading).toBeVisible();
+  test('should create and delete a new project', async ({ page }) => {
+    // Create a new project
+    await page.click('#add-project-btn');
+    await page.waitForSelector('.project-card');
+    const projectTitle = await page.locator('.project-card:first-child h3').textContent();
+    expect(projectTitle).toBe('Nieuw Project');
 
-    // Take a screenshot
-    await page.screenshot({ path: 'tests/screenshots/admin_page_verification.png' });
+    // Delete the project
+    page.on('dialog', dialog => dialog.accept());
+    await page.click('.project-card:first-child .delete-project-btn');
+    await page.waitForLoadState('networkidle');
+    const projects = await page.locator('.project-card').count();
+    expect(projects).toBe(0);
   });
 });
