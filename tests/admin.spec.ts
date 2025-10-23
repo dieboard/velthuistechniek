@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-// Read the variable once at the top
+// const ADMIN_PASSWORD = "Martijn1"; // <-- Reverted temporary debug
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 test.describe('Admin Panel', () => {
@@ -16,24 +16,37 @@ test.describe('Admin Panel', () => {
 
     await page.goto('/login');
 
-    // 2. No more red line!
-    // TypeScript now knows ADMIN_PASSWORD is a string
-    // because of the check above.
-    await page.fill('input[name="password"]', ADMIN_PASSWORD);
-    
-    await page.click('button[type="submit"]');
+    // 2. Explicitly find and fill password
+    // (Using the <input id="password"> from your login.html)
+    const passwordInput = page.locator('#password');
+    await expect(passwordInput).toBeVisible();
+    await passwordInput.fill(ADMIN_PASSWORD);
 
-    // --- NEW, BETTER CHECK ---
-    // Add a check for a login error message.
-    // This provides a much clearer failure reason than a simple timeout.
-    // **Please update this selector** to match your actual error message element.
-    const errorLocator = page.locator('#login-error, .error-message, [data-testid="login-error"]'); 
-    
-    // Assert that no error message is (or becomes) visible
-    await expect(errorLocator).toBeHidden(); 
-    // -------------------------
+    // 3. Explicitly find and click button
+    // (Using the <button type="submit">Login</button> from your login.html)
+    const loginButton = page.getByRole('button', { name: 'Login' });
+    await expect(loginButton).toBeVisible();
+    await loginButton.click();
 
-    // If no error message appeared, *then* we wait for the URL to change
+    // 4. Wait for *either* the admin page title OR the login error to appear.
+    // This is the "fork in the road" and prevents any timeout.
+    const adminTitle = page.getByTestId('admin-page-title'); // From your admin.html
+    const errorMessage = page.locator('#error-message'); // From your login.html
+
+    // This is the key: Wait for one of these to be visible
+    await expect(adminTitle.or(errorMessage)).toBeVisible();
+
+    // 5. Now, check *which* one became visible.
+    // If the error is visible, fail the test with a clear message.
+    const isErrorVisible = await errorMessage.isVisible();
+    if (isErrorVisible) {
+      // This will fail the test with a crystal-clear message
+      throw new Error(`Login failed: ${await errorMessage.textContent()}`);
+    }
+
+    // 6. If we're here, the error was *not* visible, so the admin title *must* be.
+    // We can add a final confirmation.
+    await expect(adminTitle).toBeVisible();
     await expect(page).toHaveURL('/admin');
   });
 
