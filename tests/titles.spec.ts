@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Homepage: Static Content (Above the Fold)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3000/');
+    await page.goto('/');
   });
 
   test('should display the main page title', async ({ page }) => {
@@ -37,7 +37,7 @@ test.describe('Homepage: Lazy-Loaded Sections', () => {
     test(`should display the "${sectionInfo.title}" section after scrolling`, async ({
       page,
     }) => {
-      await page.goto('http://localhost:3000/');
+      await page.goto('/');
 
       // 1. Get a locator for the section *container*
       const sectionContainer = page.locator(sectionInfo.id);

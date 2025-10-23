@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Main Page Modal Verification', () => {
   test('should open and close the project modal', async ({ page }) => {
     // 1. Navigate and wait for a stable element (not networkidle)
-    await page.goto('http://localhost:3000/');
+    await page.goto('/');
     await expect(
       page.getByRole('heading', { name: 'Velthuis Techniek', exact: true }),
     ).toBeVisible();
