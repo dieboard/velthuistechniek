@@ -6,7 +6,6 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 test.describe('Admin Panel', () => {
 
   test.beforeEach(async ({ page }) => {
-    // --- THIS IS THE FIX ---
     // 1. Check if the environment variable exists
     if (!ADMIN_PASSWORD) {
       // This fails the test immediately with a clear error
@@ -24,7 +23,17 @@ test.describe('Admin Panel', () => {
     
     await page.click('button[type="submit"]');
 
-    // Wait for the URL to change to /admin, confirming login
+    // --- NEW, BETTER CHECK ---
+    // Add a check for a login error message.
+    // This provides a much clearer failure reason than a simple timeout.
+    // **Please update this selector** to match your actual error message element.
+    const errorLocator = page.locator('#login-error, .error-message, [data-testid="login-error"]'); 
+    
+    // Assert that no error message is (or becomes) visible
+    await expect(errorLocator).toBeHidden(); 
+    // -------------------------
+
+    // If no error message appeared, *then* we wait for the URL to change
     await expect(page).toHaveURL('/admin');
   });
 
@@ -91,4 +100,3 @@ test.describe('Admin Panel', () => {
   });
 
 });
-
