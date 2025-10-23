@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    <!-- The API key is now a placeholder that the server will replace -->
-    <script src="https://cdn.tiny.cloud/1/YOUR_TINYMCE_API_KEY_PLACEHOLDER/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+    <!-- TinyMCE API Key -->
+    <script src="https://cdn.tiny.cloud/1/3n17gnuookphbwng19976ys835re9sbihbx9luba62brkc98/tinymce/8/tinymce.min.js" referrerpolicy="origin"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
         h1, h2 { color: #333; }
@@ -27,8 +27,10 @@
         button:hover { background-color: #0056b3; }
         .delete-btn { background-color: #dc3545; }
         .delete-btn:hover { background-color: #c82333; }
+        .download-btn { background-color: #28a745; }
+        .download-btn:hover { background-color: #218838; }
         form { margin-top: 20px; }
-        input[type="text"], input[type="file"] {
+        input[type="text"], input[type="file"], textarea {
             width: 100%; padding: 8px; margin: 10px 0; box-sizing: border-box;
         }
     </style>
@@ -37,7 +39,8 @@
 
     <div id="app">
         <button id="logout-btn" style="position: absolute; top: 20px; right: 20px;">Logout</button>
-        <h1 data-testid="admin-page-title">Project Management</h1>
+        <h1>Project Management</h1>
+        <p><strong>Important:</strong> After making changes, click the "Save and Download JSON" button at the bottom. You must then replace the `content.json` file in the repository with the downloaded file and commit the changes.</p>
 
         <!-- Create New Project -->
         <div id="create-project">
@@ -58,184 +61,192 @@
             <h2>Existing Projects</h2>
             <!-- Projects will be loaded here -->
         </div>
+
+        <hr>
+        <button id="download-json-btn" class="download-btn">Save and Download content.json</button>
     </div>
 
+    <!-- Scripts for client-side authentication -->
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+
     <script>
+    // --- Protect Page ---
+    protectPage();
+
     document.addEventListener('DOMContentLoaded', function() {
         const projectsList = document.getElementById('projects-list');
         const createProjectForm = document.getElementById('create-project-form');
+        let projects = []; // Local cache for the projects array
 
-        // This function returns the new, enhanced TinyMCE configuration
-        function getTinyMceConfig(selector) {
-            return {
-                selector: selector,
-                plugins: [
-                  'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-                  'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'advtemplate', 'ai', 'uploadcare', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown','importword', 'exportword', 'exportpdf'
-                ],
-                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                tinycomments_mode: 'embedded',
-                tinycomments_author: 'Author name',
-                mergetags_list: [
-                  { value: 'First.Name', title: 'First Name' },
-                  { value: 'Email', title: 'Email' },
-                ],
-                ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
-                uploadcare_public_key: '1968d2dca0e403257add',
-            };
+        // --- Helper function to convert a file to a Base64 Data URL ---
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
         }
 
-        // Initialize TinyMCE for the new project text areas
+        // --- TinyMCE Configuration (Basic Free Version) ---
+        function getTinyMceConfig(selector) {
+             return {
+                selector: selector,
+                plugins: 'lists link image media table wordcount',
+                toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link image media | removeformat',
+            };
+        }
         tinymce.init(getTinyMceConfig('#new-modal-description'));
 
-        // Fetch and display projects
-        async function loadProjects() {
-            const response = await fetch('/api/projects');
-            const projects = await response.json();
+        // --- Load, Render, and Manage Projects ---
+        async function loadAndRenderProjects() {
+            try {
+                // Use a cache-busting query parameter to avoid loading a stale version of the file
+                const response = await fetch(`content.json?v=${Date.now()}`);
+                const data = await response.json();
+                projects = data.projects || [];
+                renderProjects();
+            } catch (e) {
+                console.error("Failed to load or parse content.json:", e);
+                projectsList.innerHTML = '<p style="color: red;">Error: Could not load projects. Is content.json valid?</p>';
+            }
+        }
+
+        function renderProjects() {
             projectsList.innerHTML = '<h2>Existing Projects</h2>';
+            // Destroy any existing TinyMCE instances before re-rendering
+            tinymce.remove();
 
             projects.forEach((project, index) => {
                 const projectEl = document.createElement('div');
                 projectEl.className = 'project';
+                projectEl.dataset.projectIndex = index;
                 projectEl.innerHTML = `
-                    <h3><input type="text" value="${project.title}" data-project-index="${index}" class="project-title-input"></h3>
-
+                    <h3><input type="text" value="${project.title}" class="project-title-input"></h3>
                     <p><strong>Tile Summary:</strong></p>
-                    <textarea data-project-index="${index}" class="tile-summary-input">${project.tileSummary || ''}</textarea>
+                    <textarea class="tile-summary-input">${project.tileSummary || ''}</textarea>
 
                     <p><strong>Tile Image:</strong></p>
                     <img src="${project.tileImage || 'images/placeholder-project.png'}" class="tile-image-preview" width="100">
-                    <form class="tile-image-form" data-project-index="${index}">
-                        <input type="file" name="tileImage">
-                        <button type="submit">Upload Tile Image</button>
-                    </form>
+                    <input type="file" class="tile-image-input" accept="image/*">
 
                     <p><strong>Modal Description:</strong></p>
-                    <div id="description-${index}" class="modal-description-div">${project.modalDescription || ''}</div>
+                    <textarea id="description-${index}" class="modal-description-input">${project.modalDescription || ''}</textarea>
 
                     <p><strong>Modal Images:</strong></p>
-                    <div class="project-images" id="images-${index}">
+                    <div class="project-images">
                         ${(project.modalImages || []).map((img, imgIndex) => `
                             <div class="project-image">
                                 <img src="${img}" alt="Project Image">
-                                <button class="delete-img-btn" data-project-index="${index}" data-image-index="${imgIndex}">&times;</button>
+                                <button class="delete-img-btn" data-image-index="${imgIndex}">&times;</button>
                             </div>
                         `).join('')}
                     </div>
-                    <form class="upload-form" data-project-index="${index}">
-                        <input type="file" name="modalImages" multiple>
-                        <button type="submit">Upload Modal Images</button>
-                    </form>
+                    <input type="file" class="modal-images-input" multiple accept="image/*">
 
-                    <button class="save-btn" data-project-index="${index}">Save All Text</button>
-                    <button class="edit-btn" data-project-index="${index}">Edit Description</button>
-                    <button class="delete-btn" data-project-index="${index}">Delete Project</button>
+                    <button class="delete-btn">Delete Project</button>
                 `;
                 projectsList.appendChild(projectEl);
-
-                // Add event listener for the "Edit" button
-                projectEl.querySelector('.edit-btn').addEventListener('click', () => {
-                    const descriptionDiv = document.getElementById(`description-${index}`);
-                    const editor = tinymce.get(`description-${index}`);
-
-                    if (!editor) {
-                        tinymce.init(getTinyMceConfig(`#description-${index}`));
-                        projectEl.querySelector('.edit-btn').textContent = "Finish Editing";
-                    } else {
-                        editor.remove();
-                        projectEl.querySelector('.edit-btn').textContent = "Edit Description";
-                    }
-                });
+                // Initialize TinyMCE for each project's description
+                tinymce.init(getTinyMceConfig(`#description-${index}`));
             });
+             // Re-initialize the editor for the "Create New Project" section
+            tinymce.init(getTinyMceConfig('#new-modal-description'));
         }
+
+        // --- Event Listeners ---
 
         // Create a new project
-        createProjectForm.addEventListener('submit', async (e) => {
+        createProjectForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const title = document.getElementById('new-project-title').value;
-            const tileSummary = document.getElementById('new-tile-summary').value;
-            const modalDescription = tinymce.get('new-modal-description').getContent();
-
-            await fetch('/api/projects', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, tileSummary, modalDescription })
-            });
+            const newProject = {
+                title: document.getElementById('new-project-title').value,
+                tileSummary: document.getElementById('new-tile-summary').value,
+                modalDescription: tinymce.get('new-modal-description').getContent(),
+                tileImage: "",
+                modalImages: []
+            };
+            projects.unshift(newProject);
             createProjectForm.reset();
             tinymce.get('new-modal-description').setContent('');
-            loadProjects();
+            renderProjects();
         });
 
-        // Update a project's text content
-        async function updateProject(index, title, tileSummary, modalDescription) {
-            await fetch(`/api/projects/${index}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, tileSummary, modalDescription })
-            });
-            loadProjects();
-        }
-
-        // Handle project deletion, saving, and image uploads
+        // Handle project modifications (delete, image uploads)
         projectsList.addEventListener('click', async (e) => {
+            const projectEl = e.target.closest('.project');
+            if (!projectEl) return;
+            const index = parseInt(projectEl.dataset.projectIndex, 10);
+
             if (e.target.classList.contains('delete-btn')) {
-                const index = e.target.dataset.projectIndex;
                 if (confirm('Are you sure you want to delete this project?')) {
-                    await fetch(`/api/projects/${index}`, { method: 'DELETE' });
-                    loadProjects();
+                    projects.splice(index, 1);
+                    renderProjects();
                 }
-            } else if (e.target.classList.contains('save-btn')) {
-                const index = e.target.dataset.projectIndex;
-                const projectEl = e.target.closest('.project');
-                const title = projectEl.querySelector('.project-title-input').value;
-                const tileSummary = projectEl.querySelector('.tile-summary-input').value;
-
-                let modalDescription;
-                const editor = tinymce.get(`description-${index}`);
-                if (editor) {
-                    modalDescription = editor.getContent();
-                } else {
-                    modalDescription = projectEl.querySelector('.modal-description-div').innerHTML;
-                }
-
-                updateProject(index, title, tileSummary, modalDescription);
             } else if (e.target.classList.contains('delete-img-btn')) {
-                const projectIndex = e.target.dataset.projectIndex;
-                const imageIndex = e.target.dataset.imageIndex;
-                 if (confirm('Are you sure you want to delete this image?')) {
-                    await fetch(`/api/projects/${projectIndex}/modal-images/${imageIndex}`, { method: 'DELETE' });
-                    loadProjects();
+                 if (confirm('Are you sure you want to delete this modal image?')) {
+                    const imageIndex = parseInt(e.target.dataset.imageIndex, 10);
+                    projects[index].modalImages.splice(imageIndex, 1);
+                    renderProjects();
                 }
             }
         });
 
-        projectsList.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const index = e.target.dataset.projectIndex;
-            const formData = new FormData(e.target);
+        // Handle file input changes for images
+        projectsList.addEventListener('change', async (e) => {
+            const projectEl = e.target.closest('.project');
+            if (!projectEl) return;
+            const index = parseInt(projectEl.dataset.projectIndex, 10);
 
-            if (e.target.classList.contains('upload-form')) {
-                await fetch(`/api/projects/${index}/modal-images`, {
-                    method: 'POST',
-                    body: formData
-                });
-            } else if (e.target.classList.contains('tile-image-form')) {
-                await fetch(`/api/projects/${index}/tile-image`, {
-                    method: 'POST',
-                    body: formData
-                });
-            }
-            loadProjects();
-        });
-
-        document.getElementById('logout-btn').addEventListener('click', async () => {
-            const response = await fetch('/logout', { method: 'POST' });
-            if (response.ok) {
-                window.location.href = '/login';
+            if (e.target.classList.contains('tile-image-input')) {
+                const file = e.target.files[0];
+                if (file) {
+                    projects[index].tileImage = await fileToBase64(file);
+                    renderProjects(); // Re-render to show new image preview
+                }
+            } else if (e.target.classList.contains('modal-images-input')) {
+                const files = Array.from(e.target.files);
+                for (const file of files) {
+                    const base64 = await fileToBase64(file);
+                    projects[index].modalImages.push(base64);
+                }
+                renderProjects(); // Re-render to show new images
             }
         });
 
-        loadProjects();
+        // Save and Download JSON
+        document.getElementById('download-json-btn').addEventListener('click', () => {
+            // First, update the local projects array with the latest text content from all editors
+            const projectElements = document.querySelectorAll('.project');
+            projectElements.forEach((projectEl) => {
+                const projectIndex = parseInt(projectEl.dataset.projectIndex, 10);
+                const project = projects[projectIndex];
+
+                project.title = projectEl.querySelector('.project-title-input').value;
+                project.tileSummary = projectEl.querySelector('.tile-summary-input').value;
+
+                const editor = tinymce.get(`description-${projectIndex}`);
+                if (editor) {
+                    project.modalDescription = editor.getContent();
+                }
+            });
+
+            // Now, trigger the download
+            const content = { projects: projects };
+            const blob = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'content.json';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        });
+
+        // --- Initial Load ---
+        loadAndRenderProjects();
+
+        // --- Logout Button ---
+        document.getElementById('logout-btn').addEventListener('click', logout);
     });
     </script>
 
