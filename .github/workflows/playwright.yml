@@ -26,9 +26,12 @@ jobs:
     
     - name: Install dependencies
       run: npm ci
-    
-    - name: Run build script
-      run: npm run build
+
+    - name: Create config.js for tests
+      run: |
+        echo "window.config = {" > config.js
+        echo "  ADMIN_PASSWORD_HASH: '\$${{ secrets.ADMIN_PASSWORD_HASH }}'" >> config.js
+        echo "};" >> config.js
     
     - name: Install Playwright browsers (Chromium only)
       run: npx playwright install --with-deps chromium
