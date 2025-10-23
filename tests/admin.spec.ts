@@ -1,7 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-// Read the variable once at the top
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+// !! TEMPORARY DEBUGGING - REMOVE BEFORE MERGE
+// We are hardcoding the password to bypass GitHub Secrets and see if the value is correct.
+const ADMIN_PASSWORD = "Martijn1";
+// const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 test.describe('Admin Panel', () => {
 
