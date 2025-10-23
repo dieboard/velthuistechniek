@@ -24,16 +24,22 @@ test.describe('Admin Panel', () => {
     await page.click('button[type="submit"]');
 
     // --- NEW, BETTER CHECK ---
-    // Add a check for a login error message.
-    // This provides a much clearer failure reason than a simple timeout.
-    // **Please update this selector** to match your actual error message element.
-    const errorLocator = page.locator('#login-error, .error-message, [data-testid="login-error"]'); 
+    // This is the locator you MUST update using the trace file.
+    // Find the real error message selector (e.g., 'div.error' or '[data-testid="login-error"]')
+    const errorLocator = page.locator('#error-message'); // <-- UPDATED THIS SELECTOR
     
-    // Assert that no error message is (or becomes) visible
-    await expect(errorLocator).toBeHidden(); 
-    // -------------------------
+    // We now wait for one of two things to happen:
+    // 1. The page successfully navigates to /admin.
+    // 2. An error message becomes visible.
+    // This gives a much clearer error than a simple URL timeout.
+    await Promise.race([
+      expect(page).toHaveURL('/admin'),
+      expect(errorLocator).toBeVisible()
+    ]);
 
-    // If no error message appeared, *then* we wait for the URL to change
+    // If we're here, we must be on the /admin page.
+    // If the error had become visible, the promise would have resolved
+    // and this next assertion would fail immediately.
     await expect(page).toHaveURL('/admin');
   });
 
@@ -100,3 +106,7 @@ test.describe('Admin Panel', () => {
   });
 
 });
+
+
+
+
