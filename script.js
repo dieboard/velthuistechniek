@@ -1,4 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- New: Load Projects Dynamically ---
+    async function loadProjects() {
+        try {
+            const response = await fetch('content.json');
+            const data = await response.json();
+            window.projects = data.projects || []; // Store for modal
+            renderProjects(window.projects);
+        } catch (error) {
+            console.error("Failed to load projects:", error);
+            const projectGrid = document.querySelector('.project-grid');
+            if(projectGrid) {
+                projectGrid.innerHTML = '<p style="color: red;">Could not load projects.</p>';
+            }
+        }
+    }
+
+    function renderProjects(projects) {
+        const projectGrid = document.querySelector('.project-grid');
+        if (!projectGrid) return;
+
+        projectGrid.innerHTML = projects.map((project, index) => `
+            <div class="project-card" data-project-index="${index}" data-testid="project-card">
+                <img src="${project.tileImage || 'images/placeholder-project.png'}" alt="${project.title}">
+                <div class="project-card-content">
+                    <h3>${project.title}</h3>
+                    <p>${project.tileSummary}</p>
+                    <button class="read-more-btn" data-testid="project-card-read-more">Lees Meer</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // --- Existing Code (with minor adjustments) ---
     const particleContainer = document.getElementById('particle-container');
     const particleCount = 20;
 
@@ -222,4 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // --- Initial Load ---
+    loadProjects();
 });

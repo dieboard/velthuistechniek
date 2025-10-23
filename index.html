@@ -60,16 +60,7 @@
         <section id="projects">
             <h2>Onze Projecten</h2>
             <div class="project-grid" data-testid="project-grid">
-                <% projects.forEach(function(project, index) { %>
-                    <div class="project-card" data-project-index="<%= index %>" data-testid="project-card">
-                        <img src="<%= project.tileImage || 'images/placeholder-project.png' %>" alt="<%= project.title %>">
-                        <div class="project-card-content">
-                            <h3><%= project.title %></h3>
-                            <p><%= project.tileSummary %></p>
-                            <button class="read-more-btn" data-testid="project-card-read-more">Lees Meer</button>
-                        </div>
-                    </div>
-                <% }); %>
+                <!-- Project cards will be injected here by script.js -->
             </div>
         </section>
 
@@ -183,9 +174,6 @@
         </div>
     </div>
 
-    <script>
-        window.projects = <%- JSON.stringify(projects) %>;
-    </script>
     <script src="script.js"></script>
 </body>
 </html>
