@@ -32,8 +32,11 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm install
-      - name: Replace TinyMCE API Key
-        run: sed -i "s/TINYMCE_API_KEY_PLACEHOLDER/${{ secrets.TINYMCE_API_KEY }}/g" admin.html
+      - name: Build production site
+        env:
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
+        run: npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
