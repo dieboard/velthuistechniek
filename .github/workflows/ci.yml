@@ -1,0 +1,15 @@
+name: CI
+
+# Run this workflow on every push and pull request
+on: [push, pull_request]
+
+jobs:
+  # This is the "name" of the status check
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Success! A check is running."
+      # In the future, you'd add real commands here like:
+      # - run: npm test  # (if you use Node.js)
+      # - run: pytest    # (if you use Python)
