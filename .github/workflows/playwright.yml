@@ -27,13 +27,12 @@ jobs:
       run: npm ci
 
     - name: Create config.js for tests
+      env:
+        ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
       run: |
         echo "window.config = {" > config.js
-        echo "  ADMIN_PASSWORD_HASH: '${{ secrets.ADMIN_PASSWORD_HASH }}'" >> config.js
+        echo "  ADMIN_PASSWORD_HASH: '$ADMIN_PASSWORD_HASH'" >> config.js
         echo "};" >> config.js
-        echo "--- Contents of config.js ---"
-        cat config.js
-        echo "---------------------------"
     
     - name: Install Playwright browsers (Chromium only)
       run: npx playwright install --with-deps chromium
