@@ -59,7 +59,8 @@ test.describe('Admin Panel', () => {
 
     await expect(newProjectCard.locator('.tile-summary-input')).toHaveValue(tileSummary);
 
-    await expect(newProjectCard.locator('.modal-description-input')).toHaveText(modalDescription);
+    // Use toHaveValue and check for the HTML content, as TinyMCE wraps text in <p> tags.
+    await expect(newProjectCard.locator('.modal-description-input')).toHaveValue(`<p>${modalDescription}</p>`);
 
     await newProjectCard.locator('.delete-btn').click();
 
