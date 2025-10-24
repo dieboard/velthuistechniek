@@ -38,6 +38,8 @@ jobs:
           echo "TINYMCE_API_KEY=${{ secrets.TINYMCE_API_KEY }}" >> .env
       - name: Build production site
         run: npm run build
+      - name: Create 404.html for SPA routing
+        run: cp ./dist/index.html ./dist/404.html       
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
