@@ -29,8 +29,11 @@ jobs:
     - name: Create config.js for tests
       run: |
         echo "window.config = {" > config.js
-        echo "  ADMIN_PASSWORD_HASH: '\$2a\$10\$H/xchhu/n1fOB9ezkYrI1eeFxJxraSkcClrwNDwDBU9/7TkMzxOvu'" >> config.js
+        echo "  ADMIN_PASSWORD_HASH: '${{ secrets.ADMIN_PASSWORD_HASH }}'" >> config.js
         echo "};" >> config.js
+        echo "--- Contents of config.js ---"
+        cat config.js
+        echo "---------------------------"
     
     - name: Install Playwright browsers (Chromium only)
       run: npx playwright install --with-deps chromium
