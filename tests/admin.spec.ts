@@ -18,11 +18,25 @@ test.describe('Admin Panel', () => {
     await expect(loginButton).toBeVisible();
     await loginButton.click();
 
-    await expect(page).toHaveURL('/admin.html');
+    // Restore the user's superior error-checking logic.
+    // This will wait for either the successful admin page title OR the login error message.
+    const adminTitle = page.getByRole('heading', { name: 'Project Management' });
+    const errorMessage = page.locator('#error-message');
+    await expect(adminTitle.or(errorMessage)).toBeVisible();
+
+    // Now, explicitly check if the login failed.
+    const isErrorVisible = await errorMessage.isVisible();
+    if (isErrorVisible) {
+      throw new Error(`Login failed with message: "${await errorMessage.textContent()}"`);
+    }
+
+    // If we're here, the login must have succeeded.
+    await expect(page).toHaveURL(/admin\.html/);
   });
 
   test('should log in successfully', async ({ page }) => {
-    await expect(page).toHaveURL('/admin.html');
+    // The beforeEach hook already verified the login, so we just check the URL.
+    await expect(page).toHaveURL(/admin\.html/);
   });
 
   test('should create, verify, and delete a new project', async ({ page }) => {
