@@ -27,7 +27,7 @@ function login(password) {
  */
 function logout() {
     sessionStorage.removeItem(SESSION_KEY);
-    window.location.href = '/login.html'; // Redirect to login page
+    window.location.href = 'login.html'; // Redirect to login page
 }
 
 /**
@@ -44,6 +44,6 @@ function isAuthenticated() {
  */
 function protectPage() {
     if (!isAuthenticated()) {
-        window.location.href = '/login.html';
+        window.location.href = 'login.html';
     }
 }

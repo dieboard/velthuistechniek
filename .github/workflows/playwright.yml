@@ -25,7 +25,7 @@ jobs:
       run: |
         echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" > .env
         echo "TINYMCE_API_KEY=${{ secrets.TINYMCE_API_KEY }}" >> .env
-    
+
     - name: Run build script
       run: npm run build
 
@@ -34,10 +34,6 @@ jobs:
 
     - name: Run Playwright tests
       run: npx playwright test --project=chromium
-
-      env:
-        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-        TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
 
     - name: Upload test results
       if: failure()
