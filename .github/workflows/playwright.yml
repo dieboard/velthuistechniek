@@ -11,6 +11,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     env:
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
       ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
@@ -27,8 +28,6 @@ jobs:
       run: npm ci
 
     - name: Create config.js for tests
-      env:
-        ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
       run: |
         echo "window.config = {" > config.js
         echo "  ADMIN_PASSWORD_HASH: '$ADMIN_PASSWORD_HASH'" >> config.js
