@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-      ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
+      ADMIN_PASSWORD_HASH: 'de8e5a02ad7b5549566958de1b86c612f2403c78add37349345b0e8d2b0b6fb8'
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
       NODE_ENV: test
