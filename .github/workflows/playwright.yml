@@ -10,12 +10,6 @@ jobs:
   test:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    env:
-      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-      ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
-      NODE_ENV: test
     steps:
     - uses: actions/checkout@v4
     
@@ -23,19 +17,28 @@ jobs:
       with:
         node-version: 18
         cache: 'npm'
-    
+
     - name: Install dependencies
       run: npm ci
+
+    - name: Create .env file for build
+      run: |
+        echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" > .env
+        echo "TINYMCE_API_KEY=${{ secrets.TINYMCE_API_KEY }}" >> .env
     
     - name: Run build script
       run: npm run build
-    
+
     - name: Install Playwright browsers (Chromium only)
       run: npx playwright install --with-deps chromium
-    
+
     - name: Run Playwright tests
       run: npx playwright test --project=chromium
-    
+
+      env:
+        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
+
     - name: Upload test results
       if: failure()
       uses: actions/upload-artifact@v4

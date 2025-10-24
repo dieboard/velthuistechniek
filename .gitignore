@@ -17,3 +17,6 @@ package-lock.json
 /playwright/.auth/
 dist/style.css
 dist/style.css
+config.js
+config.js
+admin.html

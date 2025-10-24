@@ -25,23 +25,25 @@
         <p id="error-message" class="error"></p>
     </div>
 
+    <!-- Scripts for client-side authentication -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+
     <script>
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('error-message');
 
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password: password })
-            });
+            // --- Client-Side Authentication ---
+            const isAuthenticated = await login(password);
 
-            if (response.ok) {
-                window.location.href = '/admin';
+            if (isAuthenticated) {
+                // Redirect to the admin panel on successful login
+                window.location.href = '/admin.html';
             } else {
-                const errorText = await response.text();
-                errorMessage.textContent = errorText || 'Invalid password';
+                errorMessage.textContent = 'Invalid password';
             }
         });
     </script>
