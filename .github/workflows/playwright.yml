@@ -32,6 +32,9 @@ jobs:
         echo "window.config = {" > config.js
         echo "  ADMIN_PASSWORD_HASH: '$ADMIN_PASSWORD_HASH'" >> config.js
         echo "};" >> config.js
+
+    - name: Replace TinyMCE API Key for tests
+      run: sed -i "s/TINYMCE_API_KEY_PLACEHOLDER/${{ secrets.TINYMCE_API_KEY }}/g" admin.html
     
     - name: Install Playwright browsers (Chromium only)
       run: npx playwright install --with-deps chromium
