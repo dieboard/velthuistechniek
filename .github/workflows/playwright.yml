@@ -11,7 +11,6 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     env:
-      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
       ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
@@ -37,7 +36,7 @@ jobs:
       run: npx playwright install --with-deps chromium
     
     - name: Run Playwright tests
-      run: ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }} npx playwright test --project=chromium
+      run: npx playwright test --project=chromium
     
     - name: Upload test results
       if: failure()

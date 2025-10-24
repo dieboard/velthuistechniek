@@ -1,13 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_PASSWORD = "Martijn1";
 
 test.describe('Admin Panel', () => {
 
   test.beforeEach(async ({ page }) => {
-    if (!ADMIN_PASSWORD) {
-      throw new Error('ADMIN_PASSWORD environment variable is not set.');
-    }
     await page.goto('/login.html');
 
     const passwordInput = page.locator('#password');
