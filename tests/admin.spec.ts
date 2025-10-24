@@ -46,8 +46,8 @@ test.describe('Admin Panel', () => {
     await page.fill('#new-project-title', projectTitle);
     await page.fill('#new-tile-summary', tileSummary);
 
-    await page.frameLocator('iframe[id^="description-"]').locator('body').fill(modalDescription);
-
+    // Use a more specific locator for the "Create New Project" TinyMCE instance
+    await page.frameLocator('#new-modal-description_ifr').locator('body').fill(modalDescription);
 
     await page.click('#create-project-form button[type="submit"]');
 
