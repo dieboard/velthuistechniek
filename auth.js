@@ -1,7 +1,7 @@
 // --- Client-Side Authentication Module (auth.js) ---
 
-// Note: bcrypt.js must be included in any HTML file that uses this script.
-// <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+// Note: js-sha256.js must be included in any HTML file that uses this script.
+// <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
 
 const SESSION_KEY = 'loggedIn';
 
@@ -10,18 +10,16 @@ const SESSION_KEY = 'loggedIn';
  * @param {string} password - The password entered by the user.
  * @returns {boolean} - True if the password is correct, false otherwise.
  */
-async function login(password) {
-    if (typeof dcodeIO === 'undefined' || typeof dcodeIO.bcrypt === 'undefined') {
-        console.error("bcrypt.js is not loaded. Make sure the script tag is included in your HTML.");
-        return false;
-    }
-    // config.js will be created in the next step and will contain ADMIN_PASSWORD_HASH
+function login(password) {
+    // config.js will contain ADMIN_PASSWORD_HASH
     const storedHash = window.config.ADMIN_PASSWORD_HASH;
-    const isMatch = await dcodeIO.bcrypt.compareSync(password, storedHash);
-    if (isMatch) {
+    const inputHash = sha256(password); // Hash the input password
+
+    if (inputHash === storedHash) {
         sessionStorage.setItem(SESSION_KEY, 'true');
+        return true;
     }
-    return isMatch;
+    return false;
 }
 
 /**
