@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: 18
         cache: 'npm'
-    
+
     - name: Install dependencies
       run: npm ci
 
@@ -25,16 +25,20 @@ jobs:
       run: |
         echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" > .env
         echo "TINYMCE_API_KEY=${{ secrets.TINYMCE_API_KEY }}" >> .env
-
+    
     - name: Run build script
       run: npm run build
-    
+
     - name: Install Playwright browsers (Chromium only)
       run: npx playwright install --with-deps chromium
-    
+
     - name: Run Playwright tests
       run: npx playwright test --project=chromium
-    
+
+      env:
+        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
+
     - name: Upload test results
       if: failure()
       uses: actions/upload-artifact@v4
