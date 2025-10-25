@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         projectGrid.innerHTML = projects.map((project, index) => `
             <div class="project-card" data-project-index="${index}" data-testid="project-card">
-                <img src="${project.tileImage || 'images/placeholder-project.png'}" alt="${project.title}" onerror="this.onerror=null;this.src='images/placeholder-project.png';">
+                <img src="${project.tileImage || 'images/placeholder-project.png'}" alt="${project.title}">
                 <div class="project-card-content">
                     <h3>${project.title}</h3>
                     <p>${project.tileSummary}</p>
