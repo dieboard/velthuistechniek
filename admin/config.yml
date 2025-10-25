@@ -1,0 +1,22 @@
+backend:
+  name: github
+  repo: dieboard/velthuistechniek
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "projects"
+    label: "Projects"
+    folder: "_data/projects"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Tile Image", name: "tileImage", widget: "image"}
+      - {label: "Tile Summary", name: "tileSummary", widget: "string"}
+      - {label: "Modal Description", name: "modalDescription", widget: "markdown"}
+      - {label: "Modal Images", name: "modalImages", widget: "list", field: {label: "Image", name: "image", widget: "image"}}
+    meta:
+      - {label: "Content File", name: "contentFile", widget: "hidden", default: "content.json"}
