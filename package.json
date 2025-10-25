@@ -1,11 +1,12 @@
 {
   "dependencies": {
     "http-server": "^14.1.1",
-    "dotenv": "^16.4.5"
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",
-    "@types/node": "^24.8.1"
+    "@types/node": "^24.8.1",
+    "dotenv": "^16.4.5"
   },
   "scripts": {
     "build": "node build.js",
