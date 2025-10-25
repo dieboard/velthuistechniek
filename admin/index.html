@@ -7,5 +7,13 @@
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </head>
 <body>
+  <script>
+    try {
+      // This will be automatically initialized by the Decap CMS script
+    } catch (error) {
+      console.error("Error initializing Decap CMS:", error);
+      document.body.innerHTML = "<h1>Error initializing Decap CMS</h1><pre>" + error.stack + "</pre>";
+    }
+  </script>
 </body>
 </html>
