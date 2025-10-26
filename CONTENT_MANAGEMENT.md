@@ -1,41 +1,41 @@
 # Content Management Guide
 
-This guide explains how to update the content of your website.
+This guide explains how to update the project content on your website using the Decap CMS admin panel.
 
-## Editing Text
+## Accessing the Admin Panel
 
-All the text on the website is in the `index.html` file. You can edit this file to change the text.
+1.  Navigate to `[your-website-url]/admin/`.
+2.  You will be prompted to log in with your GitHub account.
+3.  You must have write permissions to the [GitHub repository](https://github.com/dieboard/velthuistechniek) to log in.
 
-For example, to change the "About Us" section, find this part of the code in `index.html` and edit the text inside the `<p>` tags:
+## Managing Projects
 
-```html
-<section id="about">
-    <h2>Over Ons</h2>
-    <p>Hier komt de tekst over ons bedrijf. We zijn gespecialiseerd in beveiligingsinstallaties en bieden op maat gemaakte oplossingen voor zowel particulieren als bedrijven.</p>
-</section>
-```
+Once logged in, you will see the **Projects** collection.
 
-## Managing Images
+### Editing Existing Projects
 
-To add or change images in the gallery, you need to do two things:
+1.  Click on the "Projects" entry in the left-hand sidebar.
+2.  You will see a list of all current projects. Click on a project title to open the editor.
+3.  In the editor, you can modify the following fields:
+    *   **Title:** The main title of the project.
+    *   **Tile Summary:** A short summary that appears on the project card on the homepage.
+    *   **Tile Image:** The image displayed on the project card. You can drag and drop a new image or select one from the media library.
+    *   **Modal Description:** The detailed description that appears in the project's pop-up modal. This field supports Markdown for text formatting.
+    *   **Modal Images:** A gallery of images for the project modal. You can add, remove, or reorder images here.
 
-1.  **Add the image file:** Place your new image files in the `images/` directory.
-2.  **Update the gallery:** In `index.html`, find the `<div class="gallery">` section. For each new image, add a new `<img>` tag like this:
+### Creating a New Project
 
-```html
-<div class="gallery">
-    <!-- Add your new image here -->
-    <img src="images/new-image.jpg" alt="A descriptive caption for the new image">
+1.  From the "Projects" collection view, click the **"Add new"** button.
+2.  Fill in the fields as described above.
+3.  Click **"Publish"** to save the new project.
 
-    <!-- Existing images -->
-    <img src="images/placeholder1.webp" alt="Placeholder Image 1">
-    <img src="images/placeholder2.webp" alt="Placeholder Image 2">
-    ...
-</div>
-```
+### Deleting a Project
 
-**Important:**
-*   Replace `"images/new-image.jpg"` with the path to your new image.
-*   Replace `"A descriptive caption for the new image"` with a short, descriptive caption that will be displayed below the image in the lightbox.
+1.  Open the project you wish to delete.
+2.  Click the **"Delete"** button, which is typically found at the bottom of the editor page.
 
-By following these instructions, you can easily keep your website's content up to date.
+## Saving Changes
+
+-   After making any changes, the **"Publish"** button at the top of the page will become active.
+-   Click **"Publish"** and then **"Publish now"** to save your changes.
+-   Decap CMS will automatically create a new commit in the GitHub repository with your updates. The website will rebuild and reflect the changes shortly after.

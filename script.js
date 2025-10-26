@@ -1,4 +1,41 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Project Data Loading ---
+    let projects = []; // To hold the project data
+
+    async function loadProjects() {
+        try {
+            const response = await fetch('content.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            projects = data.projects || []; // Store projects in the `projects` array
+            renderProjects();
+        } catch (error) {
+            console.error("Failed to load projects:", error);
+            const projectGrid = document.querySelector('.project-grid');
+            if (projectGrid) {
+                projectGrid.innerHTML = '<p>Projecten konden niet geladen worden. Probeer het later opnieuw.</p>';
+            }
+        }
+    }
+
+    function renderProjects() {
+        const projectGrid = document.querySelector('.project-grid');
+        if (!projectGrid) return;
+
+        projectGrid.innerHTML = projects.map((project, index) => `
+            <div class="project-card" data-project-index="${index}" data-testid="project-card">
+                <img src="${project.tileImage || 'images/placeholder-project.png'}" alt="${project.title}" onerror="this.onerror=null;this.src='images/placeholder-project.png';">
+                <div class="project-card-content">
+                    <h3>${project.title}</h3>
+                    <p>${project.tileSummary}</p>
+                    <button class="read-more-btn" data-testid="project-card-read-more">Lees Meer</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
     const particleContainer = document.getElementById('particle-container');
     const particleCount = 20;
 
@@ -216,10 +253,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const projectCard = e.target.closest('.project-card');
                 if (projectCard) {
                     const projectIndex = projectCard.dataset.projectIndex;
-                    const project = window.projects[projectIndex];
-                    openProjectModal(project);
+                    // Use the fetched projects array
+                    const project = projects[projectIndex];
+                    if (project) {
+                        openProjectModal(project);
+                    }
                 }
             }
         });
     }
+
+    // --- Initial Load ---
+    loadProjects();
 });

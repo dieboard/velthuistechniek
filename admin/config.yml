@@ -1,0 +1,27 @@
+backend:
+  name: github
+  repo: dieboard/velthuistechniek
+  branch: main
+  base_url: https://velthuistechniek-api.onrender.com
+  auth_endpoint: auth
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "projects"
+    label: "Projects"
+    files:
+      - label: "Projects"
+        name: "projects"
+        file: "content.json"
+        fields:
+          - label: "Projects"
+            name: "projects"
+            widget: "list"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Tile Summary", name: "tileSummary", widget: "text" }
+              - { label: "Tile Image", name: "tileImage", widget: "image", required: false }
+              - { label: "Modal Description", name: "modalDescription", widget: "markdown" }
+              - { label: "Modal Images", name: "modalImages", widget: "list", field: { label: "Image", name: "image", widget: "image" }, required: false }
