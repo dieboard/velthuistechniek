@@ -2,8 +2,6 @@ backend:
   name: github
   repo: dieboard/velthuistechniek
   branch: main
-  base_url: https://velthuistechniek-api.onrender.com
-  auth_endpoint: auth
 
 media_folder: "images"
 public_folder: "/images"
