@@ -8,14 +8,8 @@ on:
 
 jobs:
   test:
-    timeout-minutes: 10
+    timeout-minutes: 15
     runs-on: ubuntu-latest
-    env:
-      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-      ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
-      NODE_ENV: test
     steps:
     - uses: actions/checkout@v4
     
@@ -27,17 +21,14 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    - name: Run build script
-      run: npm run build
-    
-    - name: Install Playwright browsers (Chromium only)
-      run: npx playwright install --with-deps chromium
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps
     
     - name: Run Playwright tests
-      run: npx playwright test --project=chromium
+      run: npx playwright test
     
     - name: Upload test results
-      if: failure()
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: playwright-report
