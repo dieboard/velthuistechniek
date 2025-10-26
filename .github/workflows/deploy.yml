@@ -20,6 +20,11 @@ jobs:
   test:
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    env:
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+      ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      TINYMCE_API_KEY: ${{ secrets.TINYMCE_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
