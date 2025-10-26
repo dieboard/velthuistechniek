@@ -24,4 +24,4 @@ collections:
               - {label: "Tile Image", name: "tileImage", widget: "image"}
               - {label: "Tile Summary", name: "tileSummary", widget: "text"}
               - {label: "Modal Description", name: "modalDescription", widget: "markdown"}
-              - {label: "Modal Images", name: "modalImages", widget: "list", field: {label: "Image", name: "image", widget: "image"}}
+              - {label: "Modal Images", name: "modalImages", widget: "list"}

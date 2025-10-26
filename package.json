@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "decap-cms-app": "^3.8.4",
     "dotenv": "^16.4.5",
     "http-server": "^14.1.1"
   },
@@ -9,8 +8,7 @@
     "@types/node": "^24.8.1"
   },
   "scripts": {
-    "build": "node build.js",
-    "start": "npm run build && http-server -p 3000 -c-1",
+    "start": "http-server -p 3000 -c-1",
     "test": "playwright test"
   }
 }
